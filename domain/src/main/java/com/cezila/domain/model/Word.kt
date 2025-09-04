@@ -1,7 +1,7 @@
 package com.cezila.domain.model
 
 import com.cezila.domain.error.WordError
-import com.cezila.domain.result.Result
+import com.cezila.domain.Result
 
 @JvmInline
 value class Word private constructor(val value: String) {

@@ -1,34 +1,33 @@
 package com.cezila.domain.use_case
 
-import com.cezila.domain.error.SubmitAvalancheGuessError
+import com.cezila.domain.error.SubmitGuessError
 import com.cezila.domain.error.WordError
 import com.cezila.domain.model.GameRules
-import com.cezila.domain.model.GuessResult
+import com.cezila.domain.model.GuessOutput
 import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
 import com.cezila.domain.model.Word
 import com.cezila.domain.repository.DictionaryRepository
-import com.cezila.domain.result.Result
+import com.cezila.domain.Result
 import com.cezila.domain.rules.GuessEvaluator
 
-class SubmitAvalancheGuessUseCase(
+class SubmitGuessUseCase(
     private val dictionaryRepository: DictionaryRepository,
     private val rules: GameRules = GameRules()
 ) {
-    data class Output(val round: Round, val result: GuessResult)
 
-    operator fun invoke(round: Round, rawGuess: String): Result<Output, SubmitAvalancheGuessError> {
-        if (round.status != RoundStatus.IN_PROGRESS) return Result.Error(SubmitAvalancheGuessError.ROUND_FINISHED)
+    operator fun invoke(round: Round, rawGuess: String): Result<GuessOutput, SubmitGuessError> {
+        if (round.status != RoundStatus.IN_PROGRESS) return Result.Error(SubmitGuessError.ROUND_FINISHED)
 
         val guess = when (val wRes = Word.of(rawGuess, rules.wordLength)) {
             is Result.Success -> wRes.data
             is Result.Error -> when (wRes.error) {
-                WordError.INVALID_LENGTH -> return Result.Error(SubmitAvalancheGuessError.INVALID_LENGTH)
-                WordError.INVALID_CHARS -> return Result.Error(SubmitAvalancheGuessError.INVALID_CHARS)
+                WordError.INVALID_LENGTH -> return Result.Error(SubmitGuessError.INVALID_LENGTH)
+                WordError.INVALID_CHARS -> return Result.Error(SubmitGuessError.INVALID_CHARS)
             }
         }
 
-        if (!dictionaryRepository.isWordValid(guess)) return Result.Error(SubmitAvalancheGuessError.INVALID_WORD)
+        if (!dictionaryRepository.isWordValid(guess)) return Result.Error(SubmitGuessError.INVALID_WORD)
 
         val result = GuessEvaluator.evaluate(guess, round.target)
         val attempts = round.attempts + guess
@@ -45,6 +44,6 @@ class SubmitAvalancheGuessUseCase(
             status = status,
             lastResult = result
         )
-        return Result.Success(Output(newRound, result))
+        return Result.Success(GuessOutput(newRound, result))
     }
 }

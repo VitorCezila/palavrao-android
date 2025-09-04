@@ -1,8 +1,8 @@
 package com.cezila.domain.error
 
-import com.cezila.domain.result.RootError
+import com.cezila.domain.RootError
 
 enum class StartFriendRoundError : RootError {
     NOT_FOUND,
-    UNAVAILABLE
+    COMMUNICATION_ERROR
 }

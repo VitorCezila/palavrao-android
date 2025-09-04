@@ -5,7 +5,7 @@ import com.cezila.domain.error.WordError
 import com.cezila.domain.model.Word
 import com.cezila.domain.repository.DictionaryRepository
 import com.cezila.domain.repository.FriendChallengeRepository
-import com.cezila.domain.result.Result
+import com.cezila.domain.Result
 
 class CreateFriendChallengeUseCase(
     private val dictionaryRepository: DictionaryRepository,

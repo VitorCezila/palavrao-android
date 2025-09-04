@@ -4,7 +4,7 @@ import com.cezila.domain.error.StartAvalancheRoundError
 import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
 import com.cezila.domain.repository.AvalancheRepository
-import com.cezila.domain.result.Result
+import com.cezila.domain.Result
 
 class StartAvalancheRoundUseCase(
     private val avalancheRepository: AvalancheRepository

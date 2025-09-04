@@ -4,7 +4,7 @@ import com.cezila.domain.error.StartDailyRoundError
 import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
 import com.cezila.domain.repository.DailyWordRepository
-import com.cezila.domain.result.Result
+import com.cezila.domain.Result
 import java.time.LocalDate
 
 class StartDailyRoundUseCase(

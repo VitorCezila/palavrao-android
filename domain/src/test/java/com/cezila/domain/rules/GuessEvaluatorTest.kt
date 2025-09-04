@@ -5,7 +5,7 @@ import com.cezila.domain.model.Word
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import org.junit.Test
-import com.cezila.domain.result.Result
+import com.cezila.domain.Result
 
 class GuessEvaluatorTest {
 

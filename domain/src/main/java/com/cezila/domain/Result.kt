@@ -1,4 +1,4 @@
-package com.cezila.domain.result
+package com.cezila.domain
 
 import com.cezila.domain.error.Error
 
