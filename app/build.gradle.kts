@@ -55,6 +55,9 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
 
+    // core modules
+    implementation(project(":core-designsystem"))
+
     // jetpack
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)

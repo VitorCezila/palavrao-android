@@ -1,4 +1,4 @@
-package com.cezila.palavrao.ui.theme
+package com.cezila.core_designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
