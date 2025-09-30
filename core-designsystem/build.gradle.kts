@@ -23,6 +23,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+
     api(libs.androidx.startup)
 
     api(libs.androidx.compose.runtime)

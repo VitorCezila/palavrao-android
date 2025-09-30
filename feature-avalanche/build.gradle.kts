@@ -2,6 +2,10 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlinx.serialization)
+    id("dagger.hilt.android.plugin")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -24,6 +28,11 @@ android {
 
 dependencies {
 
+    // core
+    implementation(project(":core-designsystem"))
+    implementation(project(":data"))
+    implementation(project(":domain"))
+
     // compose
     implementation(libs.androidx.compose.runtime)
     implementation(platform(libs.androidx.compose.bom))
@@ -35,6 +44,10 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
+    // jetpack
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
+    ksp(libs.hilt.compiler)
 
     // testing
     debugImplementation(libs.ui.tooling)

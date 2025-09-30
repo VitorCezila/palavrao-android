@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.cezila.core_designsystem.theme.PalavraoTheme
+import com.cezila.feature_avalanche.AvalancheScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,7 +23,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 PalavraoTheme {
                     Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-
+                        AvalancheScreen()
                     }
                 }
             }
