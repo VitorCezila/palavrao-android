@@ -23,3 +23,5 @@ rootProject.name = "Palavrao"
 include(":app")
 include(":domain")
 include(":data")
+include(":feature-avalanche")
+include(":core-designsystem")
