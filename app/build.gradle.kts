@@ -57,7 +57,9 @@ dependencies {
 
     // core modules
     implementation(project(":core-designsystem"))
+    implementation(project(":core-navigation"))
     implementation(project(":feature-avalanche"))
+    implementation(project(":feature-home"))
 
     // jetpack
     implementation(libs.hilt.android)
