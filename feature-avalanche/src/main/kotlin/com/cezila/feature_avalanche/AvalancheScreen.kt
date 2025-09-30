@@ -35,13 +35,15 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.cezila.core_designsystem.component.PalavraoBoard
 import com.cezila.core_designsystem.component.PalavraoKeyboard
 import com.cezila.core_designsystem.theme.PalavraoTheme
+import com.cezila.core_navigation.currentComposeNavigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AvalancheScreen(
-    vm: AvalancheViewModel = hiltViewModel<AvalancheViewModel>(),
-    onBack: (() -> Unit)? = null
+    vm: AvalancheViewModel = hiltViewModel<AvalancheViewModel>()
 ) {
+    val composeNavigator = currentComposeNavigator
+
     val state by vm.state.collectAsState()
 
     LaunchedEffect(Unit) { vm.start() }
@@ -51,7 +53,7 @@ fun AvalancheScreen(
             TopAppBar(
                 title = { Text("AVALANCHE") },
                 navigationIcon = {
-                    if (onBack != null) IconButton(onClick = onBack) {
+                    IconButton(onClick = { composeNavigator.navigateUp() }) {
                         Icon(Icons.Default.ArrowBack, contentDescription = "voltar")
                     }
                 },
@@ -87,6 +89,7 @@ fun AvalancheScreen(
                     Spacer(Modifier.height(8.dp))
                     Button(onClick = vm::start) { Text("Tentar novamente") }
                 }
+
                 else -> Column(
                     Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -132,7 +135,10 @@ fun AvalancheScreen(
 
 @Composable
 private fun LegendRow(label: String, color: androidx.compose.ui.graphics.Color) {
-    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
         Surface(
             color = color,
             shape = MaterialTheme.shapes.small
