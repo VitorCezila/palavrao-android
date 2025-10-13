@@ -3,24 +3,20 @@ package com.cezila.feature_avalanche
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.HelpOutline
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -30,119 +26,169 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.cezila.core_designsystem.component.HintRow
 import com.cezila.core_designsystem.component.PalavraoBoard
 import com.cezila.core_designsystem.component.PalavraoKeyboard
 import com.cezila.core_designsystem.theme.PalavraoTheme
 import com.cezila.core_navigation.currentComposeNavigator
+import com.cezila.domain.error.StartAvalancheRoundError
+import com.cezila.domain.error.SubmitGuessError
+import com.cezila.domain.model.Round
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AvalancheScreen(
     vm: AvalancheViewModel = hiltViewModel<AvalancheViewModel>()
 ) {
     val composeNavigator = currentComposeNavigator
-
     val state by vm.state.collectAsState()
 
-    LaunchedEffect(Unit) { vm.start() }
+    AvalancheScreenContent(
+        uiState = state,
+        startAvalancheRound = vm::start,
+        onBackPressed = composeNavigator::navigateUp,
+        onToggleHelp = vm::toggleHelp,
+        onKeyPressed = vm::onKey,
+        onEnterPressed = vm::onEnter,
+        onBackspacePressed = vm::onBackspace
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AvalancheScreenContent(
+    uiState: AvalancheUiState,
+    startAvalancheRound: () -> Unit,
+    onBackPressed: () -> Unit,
+    onToggleHelp: (Boolean) -> Unit,
+    onKeyPressed: (Char) -> Unit,
+    onEnterPressed: () -> Unit,
+    onBackspacePressed: () -> Unit,
+) {
+    LaunchedEffect(Unit) { startAvalancheRound() }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("AVALANCHE") },
                 navigationIcon = {
-                    IconButton(onClick = { composeNavigator.navigateUp() }) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "voltar")
+                    IconButton(onClick = { onBackPressed() }) {
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "voltar")
                     }
                 },
                 actions = {
-                    IconButton(onClick = { vm.toggleHelp(true) }) {
-                        Icon(Icons.Default.HelpOutline, contentDescription = "ajuda")
+                    IconButton(onClick = { onToggleHelp(true) }) {
+                        Icon(Icons.AutoMirrored.Filled.HelpOutline, contentDescription = "ajuda")
                     }
                 }
             )
         },
         bottomBar = {
-            PalavraoKeyboard(
-                enabled = !state.finished && state.round != null,
-                onKey = vm::onKey,
-                onEnter = vm::onEnter,
-                onBackspace = vm::onBackspace
-            )
+
         }
     ) { padding ->
         Box(
             Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 16.dp)
         ) {
             when {
-                state.loading -> CircularProgressIndicator(Modifier.align(Alignment.Center))
-                state.error != null -> Column(
+                uiState.loading -> CircularProgressIndicator(Modifier.align(Alignment.Center))
+                uiState.submitError != null -> Column(
                     Modifier.align(Alignment.Center),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(state.error!!)
+                    val message = when (uiState.submitError) {
+                        SubmitGuessError.ROUND_FINISHED -> "Rodada finalizada"
+                        SubmitGuessError.INVALID_LENGTH -> "Tamanho da palavra inválido"
+                        SubmitGuessError.INVALID_CHARS -> "Caracteres inválidos"
+                        SubmitGuessError.INVALID_WORD -> "Palavra inválida"
+                    }
+                    Text(message)
                     Spacer(Modifier.height(8.dp))
-                    Button(onClick = vm::start) { Text("Tentar novamente") }
+                    Button(onClick = { startAvalancheRound() }) { Text("Tentar novamente") }
+                }
+
+                uiState.startRoundError != null -> Column(
+                    Modifier.align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    val message = when (uiState.startRoundError) {
+                        StartAvalancheRoundError.COMMUNICATION_ERROR -> "Erro de comunicação"
+                    }
+                    Text(message)
+                    Spacer(Modifier.height(8.dp))
+                    Button(onClick = { startAvalancheRound() }) { Text("Tentar novamente") }
                 }
 
                 else -> Column(
                     Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Spacer(Modifier.height(12.dp))
                     PalavraoBoard(
-                        rows = state.rows,
-                        currentInput = state.currentInput,
+                        rows = uiState.rows,
+                        currentInput = uiState.currentInput,
                         wordLength = 5,
                         maxAttempts = 6
                     )
                     Spacer(Modifier.height(16.dp))
                     val msg = when {
-                        state.finished && state.won -> "Você venceu!"
-                        state.finished -> "Fim de jogo."
+                        uiState.finished && uiState.won -> "Você venceu!"
+                        uiState.finished -> "Fim de jogo."
                         else -> ""
                     }
                     if (msg.isNotEmpty()) Text(msg, color = PalavraoTheme.colors.onSurface)
                     Spacer(Modifier.height(8.dp))
+                    PalavraoKeyboard(
+                        enabled = !uiState.finished && uiState.round != null,
+                        onKey = { onKeyPressed(it) },
+                        onEnter = { onEnterPressed() },
+                        onBackspace = onBackspacePressed,
+                        keyStates = uiState.keyStates
+                    )
                 }
             }
         }
     }
 
-    if (state.showHelp) {
+    if (uiState.showHelp) {
         AlertDialog(
-            onDismissRequest = { vm.toggleHelp(false) },
+            onDismissRequest = { onToggleHelp(false) },
             confirmButton = {
-                TextButton(onClick = { vm.toggleHelp(false) }) { Text("Entendi") }
+                TextButton(onClick = { onToggleHelp(false) }) { Text("Entendi") }
             },
             title = { Text("Como jogar") },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("No modo avalanche você tenta acertar o máximo de palavras seguidas.")
-                    LegendRow("Letra não está na palavra", PalavraoTheme.colors.absent)
-                    LegendRow("Existe (posição errada)", PalavraoTheme.colors.present)
-                    LegendRow("Correta", PalavraoTheme.colors.correct)
+                    HintRow("Letra não está na palavra", PalavraoTheme.colors.absent)
+                    HintRow("Existe (posição errada)", PalavraoTheme.colors.present)
+                    HintRow("Correta", PalavraoTheme.colors.correct)
                 }
             }
         )
     }
 }
 
+@Preview
 @Composable
-private fun LegendRow(label: String, color: androidx.compose.ui.graphics.Color) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        Surface(
-            color = color,
-            shape = MaterialTheme.shapes.small
-        ) { Spacer(Modifier.size(20.dp)) }
-        Text(label)
+private fun AvalancheScreenPreview() {
+    PalavraoTheme {
+        AvalancheScreenContent(
+            uiState = AvalancheUiState().copy(
+                loading = false,
+                submitError = null,
+                startRoundError = null,
+                currentInput = "TESTA"
+            ),
+            startAvalancheRound = {},
+            onBackPressed = {},
+            onToggleHelp = {},
+            onKeyPressed = {},
+            onEnterPressed = {},
+            onBackspacePressed = {}
+        )
     }
 }
