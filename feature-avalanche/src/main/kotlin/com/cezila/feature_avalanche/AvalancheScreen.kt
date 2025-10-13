@@ -32,22 +32,39 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.cezila.core_designsystem.component.HintRow
 import com.cezila.core_designsystem.component.PalavraoBoard
 import com.cezila.core_designsystem.component.PalavraoKeyboard
+import com.cezila.core_designsystem.currentSnackbarHostState
 import com.cezila.core_designsystem.theme.PalavraoTheme
 import com.cezila.core_navigation.currentComposeNavigator
-import com.cezila.domain.error.StartAvalancheRoundError
 import com.cezila.domain.error.SubmitGuessError
-import com.cezila.domain.model.Round
 
 @Composable
 fun AvalancheScreen(
     vm: AvalancheViewModel = hiltViewModel<AvalancheViewModel>()
 ) {
+    val snackbarHostState = currentSnackbarHostState
     val composeNavigator = currentComposeNavigator
     val state by vm.state.collectAsState()
 
+    LaunchedEffect(key1 = Unit) {
+        vm.start()
+        vm.events.collect { event ->
+            when (event) {
+                is AvalancheEvent.ShowError -> {
+                    val message = when (event.message) {
+                        SubmitGuessError.ROUND_FINISHED -> "A rodada já terminou"
+                        SubmitGuessError.INVALID_LENGTH -> "A palavra deve ter 5 letras"
+                        SubmitGuessError.INVALID_CHARS -> "Caracteres inválidos"
+                        SubmitGuessError.INVALID_WORD -> "Essa palavra não existe"
+                    }
+                    snackbarHostState.showSnackbar(message = message, actionLabel = "OK")
+                }
+            }
+        }
+    }
+
     AvalancheScreenContent(
         uiState = state,
-        startAvalancheRound = vm::start,
+        onTryAgain = vm::start,
         onBackPressed = composeNavigator::navigateUp,
         onToggleHelp = vm::toggleHelp,
         onKeyPressed = vm::onKey,
@@ -60,15 +77,13 @@ fun AvalancheScreen(
 @Composable
 fun AvalancheScreenContent(
     uiState: AvalancheUiState,
-    startAvalancheRound: () -> Unit,
+    onTryAgain: () -> Unit,
     onBackPressed: () -> Unit,
     onToggleHelp: (Boolean) -> Unit,
     onKeyPressed: (Char) -> Unit,
     onEnterPressed: () -> Unit,
     onBackspacePressed: () -> Unit,
 ) {
-    LaunchedEffect(Unit) { startAvalancheRound() }
-
     Scaffold(
         topBar = {
             TopAppBar(
@@ -84,70 +99,57 @@ fun AvalancheScreenContent(
                     }
                 }
             )
-        },
-        bottomBar = {
-
         }
     ) { padding ->
         Box(
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .padding(horizontal = 16.dp),
+            contentAlignment = Alignment.Center
         ) {
             when {
-                uiState.loading -> CircularProgressIndicator(Modifier.align(Alignment.Center))
-                uiState.submitError != null -> Column(
-                    Modifier.align(Alignment.Center),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    val message = when (uiState.submitError) {
-                        SubmitGuessError.ROUND_FINISHED -> "Rodada finalizada"
-                        SubmitGuessError.INVALID_LENGTH -> "Tamanho da palavra inválido"
-                        SubmitGuessError.INVALID_CHARS -> "Caracteres inválidos"
-                        SubmitGuessError.INVALID_WORD -> "Palavra inválida"
+                uiState.loading -> CircularProgressIndicator()
+                uiState.startRoundFailed -> {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Falha ao iniciar a rodada.")
+                        Spacer(Modifier.height(8.dp))
+                        Button(onClick = onTryAgain) {
+                            Text("Tentar Novamente")
+                        }
                     }
-                    Text(message)
-                    Spacer(Modifier.height(8.dp))
-                    Button(onClick = { startAvalancheRound() }) { Text("Tentar novamente") }
                 }
 
-                uiState.startRoundError != null -> Column(
-                    Modifier.align(Alignment.Center),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    val message = when (uiState.startRoundError) {
-                        StartAvalancheRoundError.COMMUNICATION_ERROR -> "Erro de comunicação"
+                else -> {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Spacer(modifier = Modifier.height(1.dp))
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            PalavraoBoard(
+                                rows = uiState.rows,
+                                currentInput = uiState.currentInput,
+                                wordLength = 5,
+                                maxAttempts = 6
+                            )
+                            Spacer(Modifier.height(16.dp))
+                            val msg = when {
+                                uiState.finished && uiState.won -> "Você venceu!"
+                                uiState.finished -> "Fim de jogo."
+                                else -> ""
+                            }
+                            if (msg.isNotEmpty()) Text(msg, color = PalavraoTheme.colors.onSurface)
+                        }
+                        PalavraoKeyboard(
+                            enabled = !uiState.finished && uiState.round != null,
+                            onKey = onKeyPressed,
+                            onEnter = onEnterPressed,
+                            onBackspace = onBackspacePressed,
+                            keyStates = uiState.keyStates
+                        )
                     }
-                    Text(message)
-                    Spacer(Modifier.height(8.dp))
-                    Button(onClick = { startAvalancheRound() }) { Text("Tentar novamente") }
-                }
-
-                else -> Column(
-                    Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    PalavraoBoard(
-                        rows = uiState.rows,
-                        currentInput = uiState.currentInput,
-                        wordLength = 5,
-                        maxAttempts = 6
-                    )
-                    Spacer(Modifier.height(16.dp))
-                    val msg = when {
-                        uiState.finished && uiState.won -> "Você venceu!"
-                        uiState.finished -> "Fim de jogo."
-                        else -> ""
-                    }
-                    if (msg.isNotEmpty()) Text(msg, color = PalavraoTheme.colors.onSurface)
-                    Spacer(Modifier.height(8.dp))
-                    PalavraoKeyboard(
-                        enabled = !uiState.finished && uiState.round != null,
-                        onKey = { onKeyPressed(it) },
-                        onEnter = { onEnterPressed() },
-                        onBackspace = onBackspacePressed,
-                        keyStates = uiState.keyStates
-                    )
                 }
             }
         }
@@ -179,16 +181,34 @@ private fun AvalancheScreenPreview() {
         AvalancheScreenContent(
             uiState = AvalancheUiState().copy(
                 loading = false,
-                submitError = null,
-                startRoundError = null,
                 currentInput = "TESTA"
             ),
-            startAvalancheRound = {},
             onBackPressed = {},
             onToggleHelp = {},
             onKeyPressed = {},
             onEnterPressed = {},
-            onBackspacePressed = {}
+            onBackspacePressed = {},
+            onTryAgain = { }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AvalancheScreenPreviewStartRoundFailed() {
+    PalavraoTheme {
+        AvalancheScreenContent(
+            uiState = AvalancheUiState().copy(
+                loading = false,
+                currentInput = "TESTA",
+                startRoundFailed = true
+            ),
+            onBackPressed = {},
+            onToggleHelp = {},
+            onKeyPressed = {},
+            onEnterPressed = {},
+            onBackspacePressed = {},
+            onTryAgain = {}
         )
     }
 }
