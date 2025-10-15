@@ -1,5 +1,8 @@
 package com.cezila.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Round(
     val target: Word,
     val attempts: List<Word> = emptyList(),

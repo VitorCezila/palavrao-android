@@ -9,13 +9,19 @@ import com.cezila.domain.model.LetterFeedback
 import com.cezila.domain.model.LetterState
 import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
+import com.cezila.domain.model.Word
+import com.cezila.domain.rules.GuessEvaluator
+import com.cezila.domain.use_case.LoadCurrentRoundUseCase
+import com.cezila.domain.use_case.SaveRoundUseCase
 import com.cezila.domain.use_case.StartAvalancheRoundUseCase
 import com.cezila.domain.use_case.SubmitGuessUseCase
+import com.cezila.domain.use_case.UpdateGameResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -24,7 +30,10 @@ import javax.inject.Inject
 @HiltViewModel
 class AvalancheViewModel @Inject constructor(
     private val startRound: StartAvalancheRoundUseCase,
-    private val submitGuess: SubmitGuessUseCase
+    private val submitGuess: SubmitGuessUseCase,
+    private val loadCurrentRound: LoadCurrentRoundUseCase,
+    private val saveRound: SaveRoundUseCase,
+    private val updateGameResult: UpdateGameResultUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AvalancheUiState())
@@ -44,13 +53,35 @@ class AvalancheViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
-            when (val res = startRound()) {
-                is Result.Error -> _state.update {
-                    it.copy(loading = false, startRoundFailed = true)
+            val savedRound = loadCurrentRound().first()
+            if (savedRound != null) {
+                val rows = savedRound.attempts.map { attempt ->
+                    val result = GuessEvaluator.evaluate(savedRound.target, attempt)
+                    result.feedback.map { it.letter to it.state }
                 }
-
-                is Result.Success -> _state.update {
-                    it.copy(loading = false, round = res.data)
+                val keyStates = mergeKeyStatesFromAttempts(savedRound.attempts, savedRound.target)
+                _state.update {
+                    it.copy(
+                        loading = false,
+                        round = savedRound,
+                        rows = rows,
+                        keyStates = keyStates
+                    )
+                }
+            } else {
+                when (val res = startRound()) {
+                    is Result.Error -> _state.update {
+                        it.copy(loading = false, startRoundFailed = true)
+                    }
+                    is Result.Success -> _state.update {
+                        it.copy(
+                            loading = false,
+                            round = res.data,
+                            rows = emptyList(),
+                            currentInput = "",
+                            keyStates = emptyMap()
+                        )
+                    }
                 }
             }
         }
@@ -76,22 +107,26 @@ class AvalancheViewModel @Inject constructor(
         viewModelScope.launch {
             when (val res = submitGuess(round, s.currentInput)) {
                 is Result.Error -> {
-                    Log.i("AvalancheViewModel", "Error: ${res.error}")
                     _events.send(AvalancheEvent.ShowError(res.error))
                 }
-
                 is Result.Success -> {
                     val out = res.data
+                    val updatedRound = out.round
                     val row = out.result.feedback.map { it.letter to it.state }
                     _state.update {
                         it.copy(
-                            round = out.round,
+                            round = updatedRound,
                             rows = it.rows + listOf(row),
                             currentInput = "",
-                            finished = out.round.status != RoundStatus.IN_PROGRESS,
-                            won = out.round.status == RoundStatus.WON,
+                            finished = updatedRound.status != RoundStatus.IN_PROGRESS,
+                            won = updatedRound.status == RoundStatus.WON,
                             keyStates = mergeKeyStates(it.keyStates, out.result.feedback)
                         )
+                    }
+                    if (updatedRound.status != RoundStatus.IN_PROGRESS) {
+                        updateGameResult(updatedRound.status == RoundStatus.WON)
+                    } else {
+                        saveRound(updatedRound)
                     }
                 }
             }
@@ -113,6 +148,18 @@ class AvalancheViewModel @Inject constructor(
             if (cur == null || pr[f.state]!! > pr[cur]!!) m[f.letter] = f.state
         }
         return m
+    }
+
+    private fun mergeKeyStatesFromAttempts(
+        attempts: List<Word>,
+        target: Word
+    ): Map<Char, LetterState> {
+        var currentKeyStates = emptyMap<Char, LetterState>()
+        attempts.forEach { attempt ->
+            val result = GuessEvaluator.evaluate(target, attempt)
+            currentKeyStates = mergeKeyStates(currentKeyStates, result.feedback)
+        }
+        return currentKeyStates
     }
 }
 
