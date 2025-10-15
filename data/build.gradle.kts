@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlinx.serialization)
     id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp")
 }
@@ -23,6 +24,9 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.serialization.json)
 
     //jetpack
     implementation(libs.hilt.android)
