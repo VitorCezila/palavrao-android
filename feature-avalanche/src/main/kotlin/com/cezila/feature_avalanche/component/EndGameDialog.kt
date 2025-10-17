@@ -2,7 +2,6 @@ package com.cezila.feature_avalanche.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cezila.core_designsystem.R
@@ -35,11 +35,11 @@ fun EndGameDialog(
     onPlayAgain: () -> Unit,
     onShare: () -> Unit
 ) {
-    val title = if (uiState.won) "PARABÉNS!" else "NÃO FOI DESTA VEZ..."
+    val title = if (uiState.won) "PARABÉNS \uD83C\uDF89\uD83C\uDF89" else "QUE PENA \uD83D\uDE14"
     val streakText = if (uiState.won) {
         "Sequência Atual: ${uiState.currentStreak} 🔥"
     } else {
-        "Sequência Quebrada 😢"
+        "Sequência Quebrada \uD83D\uDE92"
     }
     AlertDialog(
         modifier = modifier,
@@ -49,20 +49,38 @@ fun EndGameDialog(
         onDismissRequest = onPlayAgain,
         title = {
             Text(
+                modifier = Modifier.fillMaxWidth(),
                 text = title,
                 style = MaterialTheme.typography.headlineMedium,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
             )
         },
         text = {
-            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    "A palavra era: ${uiState.round?.target?.value?.uppercase()}",
-                    style = MaterialTheme.typography.bodyLarge
+                    text = "A palavra era:",
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center
                 )
                 Text(
+                    text = "${uiState.round?.target?.value?.uppercase()}",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Text(
                     text = streakText,
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center
                 )
             }
         },

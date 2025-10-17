@@ -27,6 +27,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -99,7 +101,7 @@ fun AvalancheScreenContent(
     onToggleHelp: (Boolean) -> Unit,
     onKeyPressed: (Char) -> Unit,
     onEnterPressed: () -> Unit,
-    onBackspacePressed: () -> Unit,
+    onBackspacePressed: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -219,9 +221,18 @@ fun AvalancheScreenContent(
                         textAlign = TextAlign.Center
                     )
                     Spacer(Modifier.height(16.dp))
-                    HintRow(stringResource(R.string.absent_description), PalavraoTheme.colors.absent)
-                    HintRow(stringResource(R.string.present_description), PalavraoTheme.colors.present)
-                    HintRow(stringResource(R.string.correct_description), PalavraoTheme.colors.correct)
+                    HintRow(
+                        stringResource(R.string.absent_description),
+                        PalavraoTheme.colors.absent
+                    )
+                    HintRow(
+                        stringResource(R.string.present_description),
+                        PalavraoTheme.colors.present
+                    )
+                    HintRow(
+                        stringResource(R.string.correct_description),
+                        PalavraoTheme.colors.correct
+                    )
                 }
             }
         )
@@ -244,7 +255,7 @@ private fun AvalancheScreenPreview() {
             onBackspacePressed = {},
             onTryAgain = { },
             onPlayAgain = {},
-            onShare = {},
+            onShare = {}
         )
     }
 }
