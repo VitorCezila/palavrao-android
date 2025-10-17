@@ -10,6 +10,7 @@ import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
 import com.cezila.domain.model.Word
 import com.cezila.domain.rules.GuessEvaluator
+import com.cezila.domain.use_case.GetAvalancheStatsUseCase
 import com.cezila.domain.use_case.LoadCurrentRoundUseCase
 import com.cezila.domain.use_case.SaveRoundUseCase
 import com.cezila.domain.use_case.StartAvalancheRoundUseCase
@@ -21,6 +22,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -32,7 +35,8 @@ class AvalancheViewModel @Inject constructor(
     private val submitGuess: SubmitGuessUseCase,
     private val loadCurrentRound: LoadCurrentRoundUseCase,
     private val saveRound: SaveRoundUseCase,
-    private val updateGameResult: UpdateGameResultUseCase
+    private val updateGameResult: UpdateGameResultUseCase,
+    private val getAvalancheStats: GetAvalancheStatsUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AvalancheUiState())
@@ -41,6 +45,14 @@ class AvalancheViewModel @Inject constructor(
     private val _events = Channel<AvalancheEvent>()
     val events = _events.receiveAsFlow()
 
+    init {
+        getAvalancheStats()
+            .onEach { stats ->
+                _state.update { it.copy(currentStreak = stats.currentStreak) }
+            }
+            .launchIn(viewModelScope)
+    }
+
     fun start() {
         _state.update {
             it.copy(
@@ -48,7 +60,8 @@ class AvalancheViewModel @Inject constructor(
                 startRoundFailed = false,
                 rows = emptyList(),
                 currentInput = "",
-                keyStates = emptyMap()
+                keyStates = emptyMap(),
+                finished = false
             )
         }
         viewModelScope.launch {
@@ -136,6 +149,10 @@ class AvalancheViewModel @Inject constructor(
         _state.update { it.copy(showHelp = show) }
     }
 
+    fun playAgain() {
+        start()
+    }
+
     private fun mergeKeyStates(
         old: Map<Char, LetterState>,
         feedback: List<LetterFeedback>
@@ -171,7 +188,8 @@ data class AvalancheUiState(
     val won: Boolean = false,
     val startRoundFailed: Boolean = false,
     val showHelp: Boolean = false,
-    val keyStates: Map<Char, LetterState> = emptyMap()
+    val keyStates: Map<Char, LetterState> = emptyMap(),
+    val currentStreak: Int = 0
 )
 
 sealed interface AvalancheEvent {

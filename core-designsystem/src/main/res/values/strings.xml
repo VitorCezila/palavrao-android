@@ -25,6 +25,8 @@
     <string name="settings">Settings</string>
     <string name="ok">OK!</string>
     <string name="send">SEND</string>
+    <string name="next">PROXIMO</string>
+    <string name="share">COMPARTILHAR</string>
 
     <!-- Avalanche Warnings -->
     <string name="round_already_finished">A rodada já terminou</string>

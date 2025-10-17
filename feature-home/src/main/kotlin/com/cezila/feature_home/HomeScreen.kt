@@ -9,15 +9,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -40,6 +37,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cezila.core_designsystem.R
+import com.cezila.core_designsystem.component.RoundedButton
 import com.cezila.core_designsystem.theme.PalavraoTheme
 import com.cezila.core_navigation.PalavraoScreen
 import com.cezila.core_navigation.currentComposeNavigator
@@ -147,39 +145,25 @@ fun HomeContent(
             Spacer(modifier = Modifier.height(32.dp))
 
             Row {
-                Button(
+                RoundedButton(
                     modifier = Modifier
                         .width(130.dp)
                         .height(45.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonColors(
-                        containerColor = PalavraoTheme.colors.surface,
-                        contentColor = PalavraoTheme.colors.primary,
-                        disabledContainerColor = PalavraoTheme.colors.surface,
-                        disabledContentColor = PalavraoTheme.colors.primary
-                    ),
+                    text = stringResource(R.string.statistics),
+                    fontSize = 12,
                     onClick = { onStatsClick() }
-                ) {
-                    Text(text = stringResource(R.string.statistics), fontSize = 12.sp)
-                }
+                )
 
                 Spacer(modifier = Modifier.width(32.dp))
 
-                Button(
+                RoundedButton(
                     modifier = Modifier
                         .width(130.dp)
                         .height(45.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonColors(
-                        containerColor = PalavraoTheme.colors.surface,
-                        contentColor = PalavraoTheme.colors.primary,
-                        disabledContainerColor = PalavraoTheme.colors.surface,
-                        disabledContentColor = PalavraoTheme.colors.primary
-                    ),
+                    text = stringResource(R.string.settings),
+                    fontSize = 12,
                     onClick = { onSettingsClick() }
-                ) {
-                    Text(text = stringResource(R.string.settings), fontSize = 12.sp)
-                }
+                )
             }
             Spacer(modifier = Modifier.weight(1f))
             if (showHelp) {

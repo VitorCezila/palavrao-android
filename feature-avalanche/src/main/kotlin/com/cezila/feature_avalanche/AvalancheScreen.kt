@@ -9,13 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,10 +39,12 @@ import com.cezila.core_designsystem.R
 import com.cezila.core_designsystem.component.HintRow
 import com.cezila.core_designsystem.component.PalavraoBoard
 import com.cezila.core_designsystem.component.PalavraoKeyboard
+import com.cezila.core_designsystem.component.RoundedButton
 import com.cezila.core_designsystem.currentSnackbarHostState
 import com.cezila.core_designsystem.theme.PalavraoTheme
 import com.cezila.core_navigation.currentComposeNavigator
 import com.cezila.domain.error.SubmitGuessError
+import com.cezila.feature_avalanche.component.EndGameDialog
 
 @Composable
 fun AvalancheScreen(
@@ -78,6 +78,8 @@ fun AvalancheScreen(
     AvalancheScreenContent(
         uiState = state,
         onTryAgain = vm::start,
+        onPlayAgain = vm::playAgain,
+        onShare = {},
         onBackPressed = composeNavigator::navigateUp,
         onToggleHelp = vm::toggleHelp,
         onKeyPressed = vm::onKey,
@@ -91,6 +93,8 @@ fun AvalancheScreen(
 fun AvalancheScreenContent(
     uiState: AvalancheUiState,
     onTryAgain: () -> Unit,
+    onPlayAgain: () -> Unit,
+    onShare: () -> Unit,
     onBackPressed: () -> Unit,
     onToggleHelp: (Boolean) -> Unit,
     onKeyPressed: (Char) -> Unit,
@@ -170,21 +174,13 @@ fun AvalancheScreenContent(
                             }
                             if (msg.isNotEmpty()) Text(msg, color = PalavraoTheme.colors.onSurface)
                         }
-                        Button(
+                        RoundedButton(
                             modifier = Modifier
                                 .width(120.dp)
                                 .height(45.dp),
-                            shape = RoundedCornerShape(10.dp),
-                            colors = ButtonColors(
-                                containerColor = PalavraoTheme.colors.surface,
-                                contentColor = PalavraoTheme.colors.primary,
-                                disabledContainerColor = PalavraoTheme.colors.surface,
-                                disabledContentColor = PalavraoTheme.colors.primary
-                            ),
+                            text = stringResource(R.string.send),
                             onClick = { onEnterPressed() }
-                        ) {
-                            Text(text = stringResource(R.string.send))
-                        }
+                        )
                         PalavraoKeyboard(
                             enabled = !uiState.finished && uiState.round != null,
                             onKey = onKeyPressed,
@@ -195,6 +191,13 @@ fun AvalancheScreenContent(
                 }
             }
         }
+    }
+    if (uiState.finished) {
+        EndGameDialog(
+            uiState = uiState,
+            onPlayAgain = onPlayAgain,
+            onShare = onShare
+        )
     }
     if (uiState.showHelp) {
         AlertDialog(
@@ -239,7 +242,9 @@ private fun AvalancheScreenPreview() {
             onKeyPressed = {},
             onEnterPressed = {},
             onBackspacePressed = {},
-            onTryAgain = { }
+            onTryAgain = { },
+            onPlayAgain = {},
+            onShare = {},
         )
     }
 }
@@ -259,7 +264,9 @@ private fun AvalancheScreenPreviewStartRoundFailed() {
             onKeyPressed = {},
             onEnterPressed = {},
             onBackspacePressed = {},
-            onTryAgain = {}
+            onTryAgain = {},
+            onPlayAgain = {},
+            onShare = {}
         )
     }
 }
