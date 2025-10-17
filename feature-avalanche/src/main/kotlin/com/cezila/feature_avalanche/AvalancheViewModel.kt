@@ -1,6 +1,5 @@
 package com.cezila.feature_avalanche
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cezila.domain.Result
@@ -56,7 +55,7 @@ class AvalancheViewModel @Inject constructor(
             val savedRound = loadCurrentRound().first()
             if (savedRound != null) {
                 val rows = savedRound.attempts.map { attempt ->
-                    val result = GuessEvaluator.evaluate(savedRound.target, attempt)
+                    val result = GuessEvaluator.evaluate(attempt, savedRound.target)
                     result.feedback.map { it.letter to it.state }
                 }
                 val keyStates = mergeKeyStatesFromAttempts(savedRound.attempts, savedRound.target)
@@ -156,7 +155,7 @@ class AvalancheViewModel @Inject constructor(
     ): Map<Char, LetterState> {
         var currentKeyStates = emptyMap<Char, LetterState>()
         attempts.forEach { attempt ->
-            val result = GuessEvaluator.evaluate(target, attempt)
+            val result = GuessEvaluator.evaluate(attempt, target)
             currentKeyStates = mergeKeyStates(currentKeyStates, result.feedback)
         }
         return currentKeyStates

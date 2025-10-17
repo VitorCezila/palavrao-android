@@ -1,5 +1,6 @@
 package com.cezila.feature_avalanche
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,11 +8,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,13 +24,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -86,7 +92,7 @@ fun AvalancheScreenContent(
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = { Text("AVALANCHE") },
                 navigationIcon = {
                     IconButton(onClick = { onBackPressed() }) {
@@ -97,13 +103,22 @@ fun AvalancheScreenContent(
                     IconButton(onClick = { onToggleHelp(true) }) {
                         Icon(Icons.AutoMirrored.Filled.HelpOutline, contentDescription = "ajuda")
                     }
-                }
+                },
+                colors = TopAppBarColors(
+                    containerColor = PalavraoTheme.background.color,
+                    scrolledContainerColor = PalavraoTheme.background.color,
+                    navigationIconContentColor = PalavraoTheme.colors.primary,
+                    titleContentColor = PalavraoTheme.colors.primary,
+                    actionIconContentColor = PalavraoTheme.colors.primary
+                ),
+                modifier = Modifier.padding(vertical = 20.dp)
             )
         }
     ) { padding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
+                .background(PalavraoTheme.background.color)
                 .padding(padding)
                 .padding(horizontal = 16.dp),
             contentAlignment = Alignment.Center
@@ -142,10 +157,24 @@ fun AvalancheScreenContent(
                             }
                             if (msg.isNotEmpty()) Text(msg, color = PalavraoTheme.colors.onSurface)
                         }
+                        Button(
+                            modifier = Modifier
+                                .width(120.dp)
+                                .height(45.dp),
+                            shape = RoundedCornerShape(10.dp),
+                            colors = ButtonColors(
+                                containerColor = PalavraoTheme.colors.surface,
+                                contentColor = PalavraoTheme.colors.primary,
+                                disabledContainerColor = PalavraoTheme.colors.surface,
+                                disabledContentColor = PalavraoTheme.colors.primary
+                            ),
+                            onClick = { onEnterPressed() }
+                        ) {
+                            Text("ENVIAR")
+                        }
                         PalavraoKeyboard(
                             enabled = !uiState.finished && uiState.round != null,
                             onKey = onKeyPressed,
-                            onEnter = onEnterPressed,
                             onBackspace = onBackspacePressed,
                             keyStates = uiState.keyStates
                         )
@@ -154,17 +183,26 @@ fun AvalancheScreenContent(
             }
         }
     }
-
     if (uiState.showHelp) {
         AlertDialog(
+            containerColor = PalavraoTheme.background.color,
+            textContentColor = PalavraoTheme.colors.primary,
             onDismissRequest = { onToggleHelp(false) },
             confirmButton = {
-                TextButton(onClick = { onToggleHelp(false) }) { Text("Entendi") }
+                TextButton(
+                    onClick = { onToggleHelp(false) }
+                ) {
+                    Text(text = "Entendi", color = PalavraoTheme.colors.primary)
+                }
             },
-            title = { Text("Como jogar") },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("No modo avalanche você tenta acertar o máximo de palavras seguidas.")
+                    Text(
+                        text = "O modo avalanche consiste em tentar fazer a maior quantidade de acertos possíveis para garantir uma sequência maior.",
+                        softWrap = true,
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(Modifier.height(16.dp))
                     HintRow("Letra não está na palavra", PalavraoTheme.colors.absent)
                     HintRow("Existe (posição errada)", PalavraoTheme.colors.present)
                     HintRow("Correta", PalavraoTheme.colors.correct)

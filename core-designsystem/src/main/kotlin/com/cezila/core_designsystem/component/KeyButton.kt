@@ -29,7 +29,7 @@ fun KeyButton(
         LetterState.CORRECT -> PalavraoTheme.colors.correct
         LetterState.PRESENT -> PalavraoTheme.colors.present
         LetterState.ABSENT -> PalavraoTheme.colors.absent
-        null -> PalavraoTheme.colors.surfaceVariant
+        null -> PalavraoTheme.colors.surface
     }
     val fg = PalavraoTheme.colors.primary
 
@@ -49,6 +49,7 @@ fun KeyButton(
     ) {
         Text(
             text = label,
+            color = PalavraoTheme.colors.primary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             style = MaterialTheme.typography.labelLarge,
@@ -63,6 +64,6 @@ fun KeyButton(
 @Composable
 private fun KeyButtonPreview() {
     PalavraoTheme {
-        KeyButton(label = "ENTER", enabled = true, onClick = {})
+        KeyButton(label = "A", enabled = true, onClick = {})
     }
 }

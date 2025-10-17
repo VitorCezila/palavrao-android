@@ -20,8 +20,6 @@ fun PalavraoBoard(
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
         val filledRows = rows.map { it }
         val pendingCount = (maxAttempts - filledRows.size).coerceAtLeast(0)
-
-        // linhas já avaliadas
         filledRows.forEach { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 row.forEach { (ch, state) ->
@@ -29,7 +27,6 @@ fun PalavraoBoard(
                 }
             }
         }
-        // linha digitando agora
         if (pendingCount > 0) {
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 for (i in 0 until wordLength) {
@@ -37,7 +34,6 @@ fun PalavraoBoard(
                     Tile(ch, null)
                 }
             }
-            // linhas vazias restantes
             repeat(pendingCount - 1) {
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                     repeat(wordLength) { Tile(' ', null) }

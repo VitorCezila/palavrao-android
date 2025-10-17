@@ -1,7 +1,6 @@
 package com.cezila.palavrao.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -19,18 +18,17 @@ fun PalavraoMain(
     composeNavigator: AppComposeNavigator<PalavraoScreen>,
     snackbarHostState: SnackbarHostState
 ) {
-    val navHostController = rememberNavController()
-    LaunchedEffect(Unit) {
-        composeNavigator.handleNavigationCommands(navHostController)
-    }
     PalavraoTheme {
+        val navHostController = rememberNavController()
+        LaunchedEffect(Unit) {
+            composeNavigator.handleNavigationCommands(navHostController)
+        }
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             snackbarHost = { SnackbarHost(snackbarHostState) }
         ) { padding ->
             PalavraoNavHost(
                 navHostController = navHostController,
-                modifier = Modifier.padding(padding)
             )
         }
     }
