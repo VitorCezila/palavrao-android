@@ -2,7 +2,6 @@ package com.cezila.feature_home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,34 +11,35 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
-import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.LocalFireDepartment
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.cezila.core_designsystem.R
 import com.cezila.core_designsystem.theme.PalavraoTheme
 import com.cezila.core_navigation.PalavraoScreen
 import com.cezila.core_navigation.currentComposeNavigator
@@ -49,14 +49,20 @@ import com.cezila.feature_home.component.GameModeCard
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
     val nav = currentComposeNavigator
+
+    val showHelp = remember { mutableStateOf(false) }
+
     HomeContent(
-        modifier = Modifier,
+        modifier = modifier,
         onAvalancheClick = { nav.navigate(PalavraoScreen.AvalancheScreen) },
         onDailyClick = { nav.navigate(PalavraoScreen.DailyScreen) },
         onFriendChallengeClick = { nav.navigate(PalavraoScreen.FriendChallengeScreen) },
         onStatsClick = { nav.navigate(PalavraoScreen.StatsScreen) },
         onSettingsClick = { nav.navigate(PalavraoScreen.SettingsScreen) },
-        onToggleHelp = {}
+        onToggleHelp = { it ->
+            showHelp.value = it
+        },
+        showHelp.value
     )
 }
 
@@ -70,6 +76,7 @@ fun HomeContent(
     onStatsClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onToggleHelp: (Boolean) -> Unit,
+    showHelp: Boolean
 ) {
     Scaffold(
         modifier = modifier,
@@ -103,7 +110,7 @@ fun HomeContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = "PALAVRAO",
+                text = stringResource(R.string.app_name),
                 fontWeight = FontWeight.Bold,
                 color = PalavraoTheme.colors.primary,
                 fontSize = 36.sp,
@@ -114,8 +121,8 @@ fun HomeContent(
 
             GameModeCard(
                 icon = Icons.Default.LocalFireDepartment,
-                title = "Modo Avalanche",
-                description = "Acerte o máximo de palavras que puder.",
+                title = stringResource(R.string.avalanche_mode),
+                description = stringResource(R.string.avalanche_short_description),
                 onClick = { onAvalancheClick() }
             )
 
@@ -123,8 +130,8 @@ fun HomeContent(
 
             GameModeCard(
                 icon = Icons.Default.CalendarMonth,
-                title = "Palavra do Dia",
-                description = "Adivinhe a palavra de hoje.",
+                title = stringResource(R.string.daily_mode),
+                description = stringResource(R.string.daily_short_description),
                 onClick = { onDailyClick() }
             )
 
@@ -132,8 +139,8 @@ fun HomeContent(
 
             GameModeCard(
                 icon = Icons.Default.Groups,
-                title = "Desafiar Amigos",
-                description = "Crie ou jogue desafios.",
+                title = stringResource(R.string.challenge_mode),
+                description = stringResource(R.string.challenge_short_description),
                 onClick = { onFriendChallengeClick() }
             )
 
@@ -153,7 +160,7 @@ fun HomeContent(
                     ),
                     onClick = { onStatsClick() }
                 ) {
-                    Text(text = "ESTATISTICAS", fontSize = 12.sp)
+                    Text(text = stringResource(R.string.statistics), fontSize = 12.sp)
                 }
 
                 Spacer(modifier = Modifier.width(32.dp))
@@ -171,10 +178,51 @@ fun HomeContent(
                     ),
                     onClick = { onSettingsClick() }
                 ) {
-                    Text(text = "OPCOES", fontSize = 12.sp)
+                    Text(text = stringResource(R.string.settings), fontSize = 12.sp)
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
+            if (showHelp) {
+                AlertDialog(
+                    containerColor = PalavraoTheme.background.color,
+                    textContentColor = PalavraoTheme.colors.primary,
+                    onDismissRequest = { onToggleHelp(false) },
+                    confirmButton = {
+                        TextButton(
+                            onClick = { onToggleHelp(false) }
+                        ) {
+                            Text(text = stringResource(R.string.ok), color = PalavraoTheme.colors.primary)
+                        }
+                    },
+                    text = {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(
+                                text = stringResource(R.string.app_description),
+                                softWrap = true,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(Modifier.height(16.dp))
+                            Text(
+                                text = stringResource(R.string.avalanche_description),
+                                softWrap = true,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(Modifier.height(16.dp))
+                            Text(
+                                text = stringResource(R.string.daily_description),
+                                softWrap = true,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(Modifier.height(16.dp))
+                            Text(
+                                text = stringResource(R.string.challenge_description),
+                                softWrap = true,
+                                textAlign = TextAlign.Center
+                            )
+                        }
+                    }
+                )
+            }
         }
     }
 }
@@ -189,7 +237,8 @@ private fun HomeContentPreview() {
             onFriendChallengeClick = {},
             onStatsClick = {},
             onSettingsClick = {},
-            onToggleHelp = {}
+            onToggleHelp = {},
+            showHelp = false
         )
     }
 }

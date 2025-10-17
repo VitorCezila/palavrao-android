@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">PALAVRAO</string>
+    <string name="app_description">Palavrão possui três modos de jogo diferente para você se divertir.</string>
+
+    <!-- Game Modes -->
+    <string name="avalanche_title">AVALANCHE</string>
+    <string name="avalanche_mode" translatable="false">Avalanche Mode</string>
+    <string name="avalanche_description">🔥 Avalanche: No modo avalanche você tenta acertar o máximo de palavras seguidas.</string>
+    <string name="avalanche_short_description" translatable="false">Get as many words right as you can.</string>
+
+    <string name="daily_mode" translatable="false">Daily Word</string>
+    <string name="daily_description">📅 Palavra do Dia: Na palavra do dia seu objetivo é acertar com a menor quantidade de chutes possíveis.</string>
+    <string name="daily_short_description" translatable="false">Daily Word</string>
+
+    <string name="challenge_mode">Desafiar Amigos</string>
+    <string name="challenge_description">👥 Desafio: No modo desafio você deve acertar a palavra criada por um amigo.</string>
+    <string name="challenge_short_description">Crie ou jogue desafios.</string>
+
+    <string name="absent_description">Letra não está na palavra</string>
+    <string name="present_description">Existe (posição errada)</string>
+    <string name="correct_description">Correta</string>
+
+    <string name="statistics">Statistics</string>
+    <string name="settings">Settings</string>
+    <string name="ok">OK!</string>
+    <string name="send">SEND</string>
+
+    <!-- Avalanche Warnings -->
+    <string name="round_already_finished">A rodada já terminou</string>
+    <string name="invalid_length">A palavra deve ter 5 letras</string>
+    <string name="invalid_chars">Caracteres inválidos</string>
+    <string name="invalid_word">Essa palavra não existe</string>
+
+    <!-- Descriptions -->
+    <string name="arrow_back_description">Back</string>
+    <string name="help">Help</string>
+</resources>

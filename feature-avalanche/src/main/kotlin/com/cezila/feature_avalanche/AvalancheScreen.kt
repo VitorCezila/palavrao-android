@@ -31,10 +31,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.cezila.core_designsystem.R
 import com.cezila.core_designsystem.component.HintRow
 import com.cezila.core_designsystem.component.PalavraoBoard
 import com.cezila.core_designsystem.component.PalavraoKeyboard
@@ -50,6 +53,7 @@ fun AvalancheScreen(
     val snackbarHostState = currentSnackbarHostState
     val composeNavigator = currentComposeNavigator
     val state by vm.state.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = Unit) {
         vm.start()
@@ -57,12 +61,15 @@ fun AvalancheScreen(
             when (event) {
                 is AvalancheEvent.ShowError -> {
                     val message = when (event.message) {
-                        SubmitGuessError.ROUND_FINISHED -> "A rodada já terminou"
-                        SubmitGuessError.INVALID_LENGTH -> "A palavra deve ter 5 letras"
-                        SubmitGuessError.INVALID_CHARS -> "Caracteres inválidos"
-                        SubmitGuessError.INVALID_WORD -> "Essa palavra não existe"
+                        SubmitGuessError.ROUND_FINISHED -> context.getString(R.string.round_already_finished)
+                        SubmitGuessError.INVALID_LENGTH -> context.getString(R.string.invalid_length)
+                        SubmitGuessError.INVALID_CHARS -> context.getString(R.string.invalid_chars)
+                        SubmitGuessError.INVALID_WORD -> context.getString(R.string.invalid_word)
                     }
-                    snackbarHostState.showSnackbar(message = message, actionLabel = "OK")
+                    snackbarHostState.showSnackbar(
+                        message = message,
+                        actionLabel = context.getString(R.string.ok)
+                    )
                 }
             }
         }
@@ -93,15 +100,21 @@ fun AvalancheScreenContent(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("AVALANCHE") },
+                title = { Text(stringResource(R.string.avalanche_title)) },
                 navigationIcon = {
                     IconButton(onClick = { onBackPressed() }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "voltar")
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.arrow_back_description)
+                        )
                     }
                 },
                 actions = {
                     IconButton(onClick = { onToggleHelp(true) }) {
-                        Icon(Icons.AutoMirrored.Filled.HelpOutline, contentDescription = "ajuda")
+                        Icon(
+                            Icons.AutoMirrored.Filled.HelpOutline,
+                            contentDescription = stringResource(R.string.help)
+                        )
                     }
                 },
                 colors = TopAppBarColors(
@@ -170,7 +183,7 @@ fun AvalancheScreenContent(
                             ),
                             onClick = { onEnterPressed() }
                         ) {
-                            Text("ENVIAR")
+                            Text(text = stringResource(R.string.send))
                         }
                         PalavraoKeyboard(
                             enabled = !uiState.finished && uiState.round != null,
@@ -192,20 +205,20 @@ fun AvalancheScreenContent(
                 TextButton(
                     onClick = { onToggleHelp(false) }
                 ) {
-                    Text(text = "Entendi", color = PalavraoTheme.colors.primary)
+                    Text(text = stringResource(R.string.ok), color = PalavraoTheme.colors.primary)
                 }
             },
             text = {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
-                        text = "O modo avalanche consiste em tentar fazer a maior quantidade de acertos possíveis para garantir uma sequência maior.",
+                        text = stringResource(R.string.avalanche_description),
                         softWrap = true,
                         textAlign = TextAlign.Center
                     )
                     Spacer(Modifier.height(16.dp))
-                    HintRow("Letra não está na palavra", PalavraoTheme.colors.absent)
-                    HintRow("Existe (posição errada)", PalavraoTheme.colors.present)
-                    HintRow("Correta", PalavraoTheme.colors.correct)
+                    HintRow(stringResource(R.string.absent_description), PalavraoTheme.colors.absent)
+                    HintRow(stringResource(R.string.present_description), PalavraoTheme.colors.present)
+                    HintRow(stringResource(R.string.correct_description), PalavraoTheme.colors.correct)
                 }
             }
         )
