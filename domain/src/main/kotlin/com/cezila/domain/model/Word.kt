@@ -11,7 +11,7 @@ value class Word private constructor(val value: String) {
 
         fun of(raw: String, requiredLength: Int = 5): Result<Word, WordError> {
             val normalized = normalize(raw)
-            if (normalized.length != requiredLength ) {
+            if (normalized.length != requiredLength) {
                 return Result.Error(WordError.INVALID_LENGTH)
             }
             if (!normalized.all { it in 'A'..'Z' }) {
@@ -29,5 +29,12 @@ value class Word private constructor(val value: String) {
                 .replace(Regex("[ÚÛÙ]"), "U")
                 .replace("Ç", "C")
                 .replace(Regex("[^A-Z]"), "")
+
+        fun w(s: String): Word =
+            when (val r = of(s)) {
+                is Result.Success -> r.data
+                is Result.Error -> throw AssertionError("Word.of('$s') failed with ${r.error}")
+            }
+
     }
 }

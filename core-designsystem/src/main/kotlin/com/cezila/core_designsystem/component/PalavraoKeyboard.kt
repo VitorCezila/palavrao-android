@@ -16,7 +16,6 @@ import com.cezila.domain.model.LetterState
 @Composable
 fun PalavraoKeyboard(
     onKey: (Char) -> Unit,
-    onEnter: () -> Unit,
     onBackspace: () -> Unit,
     enabled: Boolean,
     keyStates: Map<Char, LetterState> = emptyMap()
@@ -35,14 +34,6 @@ fun PalavraoKeyboard(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
             ) {
-                if (idx == 2) {
-                    KeyButton(
-                        modifier = Modifier.weight(1.5f, fill = true),
-                        "ENTER",
-                        enabled = enabled,
-                        onClick = onEnter,
-                    )
-                }
                 line.forEach { c ->
                     KeyButton(
                         modifier = Modifier.weight(1f, fill = true),
@@ -55,7 +46,7 @@ fun PalavraoKeyboard(
                 if (idx == 2) {
                     KeyButton(
                         modifier = Modifier.weight(1.5f, fill = true),
-                        "⌫",
+                        "<",
                         enabled = enabled,
                         onClick = onBackspace,
                     )
@@ -71,7 +62,6 @@ private fun PalavraoKeyboardPreview() {
     PalavraoTheme {
         PalavraoKeyboard(
             onKey = {},
-            onEnter = {},
             onBackspace = {},
             enabled = true
         )

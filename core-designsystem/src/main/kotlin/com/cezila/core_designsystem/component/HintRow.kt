@@ -25,7 +25,7 @@ fun HintRow(label: String, color: Color) {
             color = color,
             shape = MaterialTheme.shapes.small
         ) { Spacer(Modifier.size(20.dp)) }
-        Text(label)
+        Text(text = label, color = PalavraoTheme.colors.primary)
     }
 }
 
