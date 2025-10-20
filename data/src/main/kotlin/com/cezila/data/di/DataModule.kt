@@ -7,11 +7,11 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.cezila.data.repository.AssetsDictionaryRepository
-import com.cezila.data.repository.DataStoreGameProgressRepository
+import com.cezila.data.repository.DataStoreAvalancheGameProgressRepository
 import com.cezila.data.repository.LocalRandomAvalancheRepository
 import com.cezila.domain.repository.AvalancheRepository
 import com.cezila.domain.repository.DictionaryRepository
-import com.cezila.domain.repository.GameProgressRepository
+import com.cezila.domain.repository.AvalancheGameProgressRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -56,6 +56,6 @@ object DataModule {
     fun provideGameProgressRepository(
         json: Json,
         dataStore: DataStore<Preferences>
-    ): GameProgressRepository =
-        DataStoreGameProgressRepository(dataStore = dataStore, json = json)
+    ): AvalancheGameProgressRepository =
+        DataStoreAvalancheGameProgressRepository(dataStore = dataStore, json = json)
 }

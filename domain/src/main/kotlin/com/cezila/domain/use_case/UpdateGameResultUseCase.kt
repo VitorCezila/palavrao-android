@@ -1,12 +1,12 @@
 package com.cezila.domain.use_case
 
-import com.cezila.domain.repository.GameProgressRepository
+import com.cezila.domain.repository.AvalancheGameProgressRepository
 
 class UpdateGameResultUseCase(
-    private val gameProgressRepository: GameProgressRepository
+    private val avalancheGameProgressRepository: AvalancheGameProgressRepository
 ) {
     suspend operator fun invoke(gameWon: Boolean) {
-        gameProgressRepository.updateAvalancheStats(gameWon)
-        gameProgressRepository.clearCurrentRound()
+        avalancheGameProgressRepository.updateAvalancheStats(gameWon)
+        avalancheGameProgressRepository.clearAvalancheCurrentRound()
     }
 }

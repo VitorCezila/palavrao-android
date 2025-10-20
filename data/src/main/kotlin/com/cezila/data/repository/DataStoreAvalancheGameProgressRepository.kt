@@ -6,38 +6,38 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.cezila.domain.model.Round
 import com.cezila.domain.model.avalanche.AvalancheStats
-import com.cezila.domain.repository.GameProgressRepository
+import com.cezila.domain.repository.AvalancheGameProgressRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 
-class DataStoreGameProgressRepository(
+class DataStoreAvalancheGameProgressRepository(
     private val dataStore: DataStore<Preferences>,
     private val json: Json
-) : GameProgressRepository {
+) : AvalancheGameProgressRepository {
 
     private object Keys {
-        val CURRENT_ROUND = stringPreferencesKey("current_round")
+        val AVALANCHE_CURRENT_ROUND = stringPreferencesKey("avalanche_current_round")
         val AVALANCHE_STATS = stringPreferencesKey("avalanche_stats")
     }
 
-    override fun getCurrentRound(): Flow<Round?> {
+    override fun getAvalancheCurrentRound(): Flow<Round?> {
         return dataStore.data.map { prefs ->
-            prefs[Keys.CURRENT_ROUND]?.let {
+            prefs[Keys.AVALANCHE_CURRENT_ROUND]?.let {
                 json.decodeFromString<Round>(it)
             }
         }
     }
 
-    override suspend fun saveCurrentRound(round: Round) {
+    override suspend fun saveAvalancheCurrentRound(round: Round) {
         dataStore.edit { prefs ->
-            prefs[Keys.CURRENT_ROUND] = json.encodeToString(round)
+            prefs[Keys.AVALANCHE_CURRENT_ROUND] = json.encodeToString(round)
         }
     }
 
-    override suspend fun clearCurrentRound() {
+    override suspend fun clearAvalancheCurrentRound() {
         dataStore.edit { prefs ->
-            prefs.remove(Keys.CURRENT_ROUND)
+            prefs.remove(Keys.AVALANCHE_CURRENT_ROUND)
         }
     }
 

@@ -60,6 +60,7 @@ dependencies {
     implementation(project(":core-navigation"))
     implementation(project(":feature-avalanche"))
     implementation(project(":feature-home"))
+    implementation(project(":feature-stats"))
 
     // jetpack
     implementation(libs.hilt.android)

@@ -5,6 +5,7 @@ import androidx.navigation.compose.composable
 import com.cezila.core_navigation.PalavraoScreen
 import com.cezila.feature_avalanche.AvalancheScreen
 import com.cezila.feature_home.HomeScreen
+import com.cezila.feature_stats.StatsScreen
 
 fun NavGraphBuilder.palavraoNavigation() {
     composable<PalavraoScreen.HomeScreen> {
@@ -23,7 +24,7 @@ fun NavGraphBuilder.palavraoNavigation() {
     }
 
     composable<PalavraoScreen.StatsScreen> {
-        PlaceholderScreen("Estatística — em breve")
+        StatsScreen()
     }
     composable<PalavraoScreen.SettingsScreen> {
         PlaceholderScreen("Configuração — em breve")
