@@ -2,7 +2,7 @@ package com.cezila.data.di
 
 import com.cezila.domain.repository.AvalancheRepository
 import com.cezila.domain.repository.DictionaryRepository
-import com.cezila.domain.repository.GameProgressRepository
+import com.cezila.domain.repository.AvalancheGameProgressRepository
 import com.cezila.domain.use_case.GetAvalancheStatsUseCase
 import com.cezila.domain.use_case.LoadCurrentRoundUseCase
 import com.cezila.domain.use_case.SaveRoundUseCase
@@ -34,24 +34,24 @@ object GameModule {
     @Provides
     @Singleton
     fun provideGetAvalancheStatsUseCase(
-        repo: GameProgressRepository
-    ) = GetAvalancheStatsUseCase(gameProgressRepository = repo)
+        repo: AvalancheGameProgressRepository
+    ) = GetAvalancheStatsUseCase(avalancheGameProgressRepository = repo)
 
     @Provides
     @Singleton
     fun provideLoadCurrentRoundUseCase(
-        repo: GameProgressRepository
-    ) = LoadCurrentRoundUseCase(gameProgressRepository = repo)
+        repo: AvalancheGameProgressRepository
+    ) = LoadCurrentRoundUseCase(avalancheGameProgressRepository = repo)
 
     @Provides
     @Singleton
     fun provideSaveRoundUseCase(
-        repo: GameProgressRepository
-    ) = SaveRoundUseCase(gameProgressRepository = repo)
+        repo: AvalancheGameProgressRepository
+    ) = SaveRoundUseCase(avalancheGameProgressRepository = repo)
 
     @Provides
     @Singleton
     fun provideUpdateGameResultUseCase(
-        repo: GameProgressRepository
-    ) = UpdateGameResultUseCase(gameProgressRepository = repo)
+        repo: AvalancheGameProgressRepository
+    ) = UpdateGameResultUseCase(avalancheGameProgressRepository = repo)
 }
