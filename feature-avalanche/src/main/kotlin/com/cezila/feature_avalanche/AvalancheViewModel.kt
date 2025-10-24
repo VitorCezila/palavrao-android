@@ -59,7 +59,8 @@ class AvalancheViewModel @Inject constructor(
                 loading = true,
                 startRoundFailed = false,
                 rows = emptyList(),
-                currentInput = "",
+                currentInput = List(5) { null },
+                currentCursor = 0,
                 keyStates = emptyMap(),
                 finished = false
             )
@@ -77,7 +78,11 @@ class AvalancheViewModel @Inject constructor(
                         loading = false,
                         round = savedRound,
                         rows = rows,
-                        keyStates = keyStates
+                        keyStates = keyStates,
+                        currentInput = List(5) { null },
+                        currentCursor = 0,
+                        finished = savedRound.status != RoundStatus.IN_PROGRESS,
+                        won = savedRound.status == RoundStatus.WON
                     )
                 }
             } else {
@@ -85,12 +90,14 @@ class AvalancheViewModel @Inject constructor(
                     is Result.Error -> _state.update {
                         it.copy(loading = false, startRoundFailed = true)
                     }
+
                     is Result.Success -> _state.update {
                         it.copy(
                             loading = false,
                             round = res.data,
                             rows = emptyList(),
-                            currentInput = "",
+                            currentInput = List(5) { null },
+                            currentCursor = 0,
                             keyStates = emptyMap()
                         )
                     }
@@ -99,28 +106,71 @@ class AvalancheViewModel @Inject constructor(
         }
     }
 
+    fun onTileSelected(index: Int) {
+        val s = _state.value
+        if (s.finished || s.round == null) return
+        if (index in 0..4) {
+            _state.update { it.copy(currentCursor = index) }
+        }
+    }
+
     fun onKey(ch: Char) {
         val s = _state.value
         if (s.finished || s.round == null) return
-        if (s.currentInput.length >= 5) return
-        _state.update { it.copy(currentInput = it.currentInput + ch) }
+        val cursor = s.currentCursor
+        if (cursor > 4) return
+
+        val newInput = s.currentInput.toMutableList()
+        newInput[cursor] = ch
+
+        val nextCursor = (cursor + 1).coerceAtMost(4)
+
+        _state.update {
+            it.copy(
+                currentInput = newInput,
+                currentCursor = nextCursor
+            )
+        }
     }
 
     fun onBackspace() {
         val s = _state.value
-        if (s.currentInput.isEmpty()) return
-        _state.update { it.copy(currentInput = it.currentInput.dropLast(1)) }
+        if (s.finished) return
+        val cursor = s.currentCursor
+        val newInput = s.currentInput.toMutableList()
+
+        if (cursor == 0 && newInput[0] == null) return
+
+        if (newInput[cursor] != null) {
+            newInput[cursor] = null
+            _state.update { it.copy(currentInput = newInput) }
+        }
+
+        else if (cursor > 0) {
+            newInput[cursor - 1] = null
+            _state.update {
+                it.copy(
+                    currentInput = newInput,
+                    currentCursor = cursor - 1
+                )
+            }
+        }
     }
 
     fun onEnter() {
         val s = _state.value
         val round = s.round ?: return
-        if (s.currentInput.length != 5) return
+        if (s.currentInput.any { it == null }) {
+            return
+        }
+
+        val guessString = s.currentInput.filterNotNull().joinToString("")
         viewModelScope.launch {
-            when (val res = submitGuess(round, s.currentInput)) {
+            when (val res = submitGuess(round, guessString)) {
                 is Result.Error -> {
                     _events.send(AvalancheEvent.ShowError(res.error))
                 }
+
                 is Result.Success -> {
                     val out = res.data
                     val updatedRound = out.round
@@ -129,7 +179,8 @@ class AvalancheViewModel @Inject constructor(
                         it.copy(
                             round = updatedRound,
                             rows = it.rows + listOf(row),
-                            currentInput = "",
+                            currentInput = List(5) { null },
+                            currentCursor = 0,
                             finished = updatedRound.status != RoundStatus.IN_PROGRESS,
                             won = updatedRound.status == RoundStatus.WON,
                             keyStates = mergeKeyStates(it.keyStates, out.result.feedback)
@@ -183,7 +234,8 @@ data class AvalancheUiState(
     val loading: Boolean = true,
     val round: Round? = null,
     val rows: List<List<Pair<Char, LetterState>>> = emptyList(),
-    val currentInput: String = "",
+    val currentInput: List<Char?> = List(5) { null },
+    val currentCursor: Int = 0,
     val finished: Boolean = false,
     val won: Boolean = false,
     val startRoundFailed: Boolean = false,

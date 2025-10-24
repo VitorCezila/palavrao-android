@@ -27,8 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -86,7 +84,8 @@ fun AvalancheScreen(
         onToggleHelp = vm::toggleHelp,
         onKeyPressed = vm::onKey,
         onEnterPressed = vm::onEnter,
-        onBackspacePressed = vm::onBackspace
+        onBackspacePressed = vm::onBackspace,
+        onTileSelected = vm::onTileSelected
     )
 }
 
@@ -101,7 +100,8 @@ fun AvalancheScreenContent(
     onToggleHelp: (Boolean) -> Unit,
     onKeyPressed: (Char) -> Unit,
     onEnterPressed: () -> Unit,
-    onBackspacePressed: () -> Unit
+    onBackspacePressed: () -> Unit,
+    onTileSelected: (Int) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -166,7 +166,9 @@ fun AvalancheScreenContent(
                                 rows = uiState.rows,
                                 currentInput = uiState.currentInput,
                                 wordLength = 5,
-                                maxAttempts = 6
+                                maxAttempts = 6,
+                                selectedCol = uiState.currentCursor,
+                                onTileClick = onTileSelected
                             )
                             Spacer(Modifier.height(16.dp))
                             val msg = when {
@@ -246,7 +248,7 @@ private fun AvalancheScreenPreview() {
         AvalancheScreenContent(
             uiState = AvalancheUiState().copy(
                 loading = false,
-                currentInput = "TESTA"
+                currentInput = listOf('T', 'E', 'S', 'T', 'E')
             ),
             onBackPressed = {},
             onToggleHelp = {},
@@ -255,7 +257,8 @@ private fun AvalancheScreenPreview() {
             onBackspacePressed = {},
             onTryAgain = { },
             onPlayAgain = {},
-            onShare = {}
+            onShare = {},
+            onTileSelected = {}
         )
     }
 }
@@ -267,7 +270,7 @@ private fun AvalancheScreenPreviewStartRoundFailed() {
         AvalancheScreenContent(
             uiState = AvalancheUiState().copy(
                 loading = false,
-                currentInput = "TESTA",
+                currentInput = listOf('T', 'E', 'S', 'T', 'E'),
                 startRoundFailed = true
             ),
             onBackPressed = {},
@@ -277,7 +280,8 @@ private fun AvalancheScreenPreviewStartRoundFailed() {
             onBackspacePressed = {},
             onTryAgain = {},
             onPlayAgain = {},
-            onShare = {}
+            onShare = {},
+            onTileSelected = {}
         )
     }
 }

@@ -1,7 +1,9 @@
 package com.cezila.core_designsystem.component
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,7 +20,9 @@ import com.cezila.domain.model.LetterState
 @Composable
 fun Tile(
     ch: Char,
-    state: LetterState?
+    state: LetterState?,
+    isSelected: Boolean = false,
+    onClick: () -> Unit = {}
 ) {
     val color = when (state) {
         LetterState.CORRECT -> PalavraoTheme.colors.correct
@@ -26,10 +30,21 @@ fun Tile(
         LetterState.ABSENT -> PalavraoTheme.colors.absent
         null -> PalavraoTheme.background.color
     }
+
+    val tileBorder = if (isSelected) {
+        BorderStroke(2.dp, PalavraoTheme.colors.focus)
+    } else {
+        BorderStroke(1.dp, PalavraoTheme.colors.primary)
+    }
+
     Box(
         modifier = Modifier
             .size(48.dp)
-            .border(1.dp, PalavraoTheme.colors.primary, RoundedCornerShape(6.dp))
+            .clickable(
+                enabled = state == null,
+                onClick = onClick
+            )
+            .border(tileBorder, RoundedCornerShape(6.dp))
             .background(color, RoundedCornerShape(8.dp)),
         contentAlignment = Alignment.Center,
     ) {
@@ -45,6 +60,10 @@ fun Tile(
 @Composable
 private fun TilePreview() {
     PalavraoTheme {
-        Tile('A', LetterState.CORRECT)
+        Tile(
+            ch = 'A',
+            state = LetterState.ABSENT,
+            isSelected = false
+        )
     }
 }

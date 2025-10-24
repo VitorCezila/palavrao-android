@@ -2,6 +2,7 @@ package com.cezila.palavrao.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -25,7 +26,14 @@ fun PalavraoMain(
         }
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            snackbarHost = { SnackbarHost(snackbarHostState) }
+            snackbarHost = {
+                SnackbarHost(snackbarHostState) { data ->
+                    Snackbar(
+                        snackbarData = data,
+                        actionColor = PalavraoTheme.colors.primary
+                    )
+                }
+            }
         ) { padding ->
             PalavraoNavHost(
                 navHostController = navHostController,

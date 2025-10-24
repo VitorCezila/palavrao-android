@@ -13,7 +13,9 @@ import com.cezila.domain.model.LetterState
 @Composable
 fun PalavraoBoard(
     rows: List<List<Pair<Char, LetterState>>>,
-    currentInput: String,
+    currentInput: List<Char?>,
+    selectedCol: Int,
+    onTileClick: (col: Int) -> Unit,
     wordLength: Int = 5,
     maxAttempts: Int = 6
 ) {
@@ -23,7 +25,12 @@ fun PalavraoBoard(
         filledRows.forEach { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 row.forEach { (ch, state) ->
-                    Tile(ch, state)
+                    Tile(
+                        ch,
+                        state,
+                        isSelected = false,
+                        onClick = {}
+                    )
                 }
             }
         }
@@ -31,12 +38,24 @@ fun PalavraoBoard(
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 for (i in 0 until wordLength) {
                     val ch = currentInput.getOrNull(i) ?: ' '
-                    Tile(ch, null)
+                    val isSelected = (i == selectedCol)
+                    Tile(
+                        ch = ch,
+                        state = null,
+                        isSelected = isSelected,
+                        onClick = { onTileClick(i) })
                 }
             }
             repeat(pendingCount - 1) {
                 Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                    repeat(wordLength) { Tile(' ', null) }
+                    repeat(wordLength) {
+                        Tile(
+                            ch = ' ',
+                            state = null,
+                            isSelected = false,
+                            onClick = {}
+                        )
+                    }
                 }
             }
         }
@@ -71,7 +90,9 @@ private fun PalavraoBoardPreview() {
                     'A' to LetterState.ABSENT
                 ),
             ),
-            currentInput = "",
+            currentInput = listOf('T', 'E', 'S', 'T', 'E'),
+            selectedCol = 1,
+            onTileClick = {},
             wordLength = 5,
             maxAttempts = 6
         )
