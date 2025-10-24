@@ -117,7 +117,7 @@ private fun EndGameDialogPreviewLoose() {
             uiState = AvalancheUiState().copy(
                 loading = false,
                 won = false,
-                currentInput = "TESTA",
+                currentInput = listOf('T', 'E', 'S', 'T', 'E'),
                 round = Round(
                     target = Word.w("SALAO"),
                     attempts = emptyList(),
@@ -148,7 +148,7 @@ private fun EndGameDialogPreviewWon() {
             uiState = AvalancheUiState().copy(
                 loading = false,
                 won = true,
-                currentInput = "TESTA",
+                currentInput = listOf('T', 'E', 'S', 'T', 'E'),
                 round = Round(
                     target = Word.w("SALAO"),
                     attempts = emptyList(),
