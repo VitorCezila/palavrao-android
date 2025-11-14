@@ -1,8 +1,8 @@
-package com.cezila.domain.use_case
+package com.cezila.domain.use_case.avalanche
 
-import com.cezila.domain.repository.AvalancheGameProgressRepository
+import com.cezila.domain.repository.avalanche.AvalancheGameProgressRepository
 
-class LoadCurrentRoundUseCase(
+class LoadCurrentAvalancheRoundUseCase(
     private val avalancheGameProgressRepository: AvalancheGameProgressRepository
 ) {
     operator fun invoke() = avalancheGameProgressRepository.getAvalancheCurrentRound()

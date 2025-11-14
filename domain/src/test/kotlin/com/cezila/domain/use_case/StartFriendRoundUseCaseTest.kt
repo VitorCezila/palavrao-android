@@ -4,6 +4,7 @@ import com.cezila.domain.error.StartFriendRoundError
 import com.cezila.domain.model.RoundStatus
 import com.cezila.domain.repository.FakeFriendChallengeRepository
 import com.cezila.domain.Result
+import com.cezila.domain.use_case.challenge.StartFriendRoundUseCase
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.runBlocking

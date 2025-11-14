@@ -1,4 +1,4 @@
-package com.cezila.domain.repository
+package com.cezila.domain.repository.avalanche
 
 import com.cezila.domain.model.Round
 import com.cezila.domain.model.avalanche.AvalancheStats

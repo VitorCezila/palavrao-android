@@ -15,7 +15,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -37,6 +36,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.cezila.core_designsystem.theme.PalavraoTheme
 import com.cezila.core_navigation.currentComposeNavigator
 import com.cezila.feature_stats.components.AvalancheStatsPage
+import com.cezila.feature_stats.components.DailyStatsPage
 import kotlinx.coroutines.launch
 
 private val TABS = listOf("AVALANCHE", "DIÁRIO", "AMIGOS")
@@ -46,7 +46,7 @@ fun StatsScreen(
     viewModel: StatsViewModel = hiltViewModel<StatsViewModel>()
 ) {
     val navigator = currentComposeNavigator
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.state.collectAsState()
     val pagerState = rememberPagerState { TABS.size }
     val scope = rememberCoroutineScope()
 
@@ -111,7 +111,7 @@ fun StatsScreen(
             ) { page ->
                 when (page) {
                     0 -> AvalancheStatsPage(stats = uiState.avalancheStats)
-                    1 -> PlaceholderStatsPage(title = "Histórico do Modo Diário")
+                    1 -> DailyStatsPage(stats = uiState.dailyStats)
                     2 -> PlaceholderStatsPage(title = "Histórico de Desafios de Amigos")
                 }
             }

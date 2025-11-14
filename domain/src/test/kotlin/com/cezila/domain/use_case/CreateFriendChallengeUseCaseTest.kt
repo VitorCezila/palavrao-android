@@ -4,6 +4,7 @@ import com.cezila.domain.error.CreateFriendChallengeError
 import com.cezila.domain.repository.FakeDictionaryRepository
 import com.cezila.domain.repository.FakeFriendChallengeRepository
 import com.cezila.domain.Result
+import com.cezila.domain.use_case.challenge.CreateFriendChallengeUseCase
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.runBlocking

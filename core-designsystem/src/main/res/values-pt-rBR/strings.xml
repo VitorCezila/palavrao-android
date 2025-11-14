@@ -9,6 +9,7 @@
     <string name="avalanche_description">🔥 Avalanche: No modo avalanche você tenta acertar o máximo de palavras seguidas.</string>
     <string name="avalanche_short_description">Acerte o máximo de palavras que puder.</string>
 
+    <string name="daily_title">DIARIO</string>
     <string name="daily_mode">Palavra do Dia</string>
     <string name="daily_description">📅 Palavra do Dia: Na palavra do dia seu objetivo é acertar com a menor quantidade de chutes possíveis.</string>
     <string name="daily_short_description">Adivinhe a palavra de hoje.</string>

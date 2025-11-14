@@ -59,6 +59,7 @@ dependencies {
     implementation(project(":core-designsystem"))
     implementation(project(":core-navigation"))
     implementation(project(":feature-avalanche"))
+    implementation(project(":feature-daily"))
     implementation(project(":feature-home"))
     implementation(project(":feature-stats"))
 

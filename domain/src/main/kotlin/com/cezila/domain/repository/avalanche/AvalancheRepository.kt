@@ -1,4 +1,4 @@
-package com.cezila.domain.repository
+package com.cezila.domain.repository.avalanche
 
 import com.cezila.domain.model.Word
 import com.cezila.domain.error.StartAvalancheRoundError

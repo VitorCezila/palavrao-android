@@ -10,12 +10,12 @@ import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
 import com.cezila.domain.model.Word
 import com.cezila.domain.rules.GuessEvaluator
-import com.cezila.domain.use_case.GetAvalancheStatsUseCase
-import com.cezila.domain.use_case.LoadCurrentRoundUseCase
-import com.cezila.domain.use_case.SaveRoundUseCase
-import com.cezila.domain.use_case.StartAvalancheRoundUseCase
+import com.cezila.domain.use_case.avalanche.GetAvalancheStatsUseCase
+import com.cezila.domain.use_case.avalanche.LoadCurrentAvalancheRoundUseCase
+import com.cezila.domain.use_case.avalanche.SaveAvalancheRoundUseCase
+import com.cezila.domain.use_case.avalanche.StartAvalancheRoundUseCase
 import com.cezila.domain.use_case.SubmitGuessUseCase
-import com.cezila.domain.use_case.UpdateGameResultUseCase
+import com.cezila.domain.use_case.avalanche.UpdateAvalancheGameResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,10 +33,10 @@ import javax.inject.Inject
 class AvalancheViewModel @Inject constructor(
     private val startRound: StartAvalancheRoundUseCase,
     private val submitGuess: SubmitGuessUseCase,
-    private val loadCurrentRound: LoadCurrentRoundUseCase,
-    private val saveRound: SaveRoundUseCase,
-    private val updateGameResult: UpdateGameResultUseCase,
-    private val getAvalancheStats: GetAvalancheStatsUseCase
+    private val loadCurrentRound: LoadCurrentAvalancheRoundUseCase,
+    private val saveRound: SaveAvalancheRoundUseCase,
+    private val updateGameResult: UpdateAvalancheGameResultUseCase,
+    getAvalancheStats: GetAvalancheStatsUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AvalancheUiState())
@@ -168,7 +168,7 @@ class AvalancheViewModel @Inject constructor(
         viewModelScope.launch {
             when (val res = submitGuess(round, guessString)) {
                 is Result.Error -> {
-                    _events.send(AvalancheEvent.ShowError(res.error))
+                    _events.send(AvalancheEvent.ShowGuessError(res.error))
                 }
 
                 is Result.Success -> {
@@ -245,5 +245,5 @@ data class AvalancheUiState(
 )
 
 sealed interface AvalancheEvent {
-    data class ShowError(val message: SubmitGuessError) : AvalancheEvent
+    data class ShowGuessError(val message: SubmitGuessError) : AvalancheEvent
 }

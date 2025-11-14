@@ -4,6 +4,7 @@ import com.cezila.domain.error.StartAvalancheRoundError
 import com.cezila.domain.model.RoundStatus
 import com.cezila.domain.repository.FakeAvalancheRepository
 import com.cezila.domain.Result
+import com.cezila.domain.use_case.avalanche.StartAvalancheRoundUseCase
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.runBlocking

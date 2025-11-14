@@ -3,6 +3,7 @@ package com.cezila.domain.repository
 import com.cezila.domain.error.StartAvalancheRoundError
 import com.cezila.domain.model.Word
 import com.cezila.domain.Result
+import com.cezila.domain.repository.avalanche.AvalancheRepository
 
 class FakeAvalancheRepository(
     private val mode: Mode
