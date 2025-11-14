@@ -16,6 +16,10 @@ android {
     }
     defaultConfig {
         minSdk = 24
+
+        android.buildFeatures.buildConfig = true
+        buildConfigField("String", "BASE_URL", "\"${System.getenv("PALAVRAO_BASE_URL")}\"")
+        buildConfigField("String", "API_KEY", "\"${System.getenv("API_KEY")}\"")
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -27,6 +31,12 @@ dependencies {
 
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     //jetpack
     implementation(libs.hilt.android)

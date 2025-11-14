@@ -59,7 +59,7 @@ fun AvalancheScreen(
         vm.start()
         vm.events.collect { event ->
             when (event) {
-                is AvalancheEvent.ShowError -> {
+                is AvalancheEvent.ShowGuessError -> {
                     val message = when (event.message) {
                         SubmitGuessError.ROUND_FINISHED -> context.getString(R.string.round_already_finished)
                         SubmitGuessError.INVALID_LENGTH -> context.getString(R.string.invalid_length)
@@ -170,13 +170,6 @@ fun AvalancheScreenContent(
                                 selectedCol = uiState.currentCursor,
                                 onTileClick = onTileSelected
                             )
-                            Spacer(Modifier.height(16.dp))
-                            val msg = when {
-                                uiState.finished && uiState.won -> "Você venceu!"
-                                uiState.finished -> "Fim de jogo."
-                                else -> ""
-                            }
-                            if (msg.isNotEmpty()) Text(msg, color = PalavraoTheme.colors.onSurface)
                         }
                         RoundedButton(
                             modifier = Modifier

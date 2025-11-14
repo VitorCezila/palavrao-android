@@ -1,10 +1,10 @@
-package com.cezila.data.repository
+package com.cezila.data.repository.avalanche
 
 import android.content.res.AssetManager
 import com.cezila.domain.Result
 import com.cezila.domain.error.StartAvalancheRoundError
 import com.cezila.domain.model.Word
-import com.cezila.domain.repository.AvalancheRepository
+import com.cezila.domain.repository.avalanche.AvalancheRepository
 import kotlin.random.Random
 
 class LocalRandomAvalancheRepository(

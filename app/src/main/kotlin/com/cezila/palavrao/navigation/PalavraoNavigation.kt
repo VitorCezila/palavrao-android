@@ -4,6 +4,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.cezila.core_navigation.PalavraoScreen
 import com.cezila.feature_avalanche.AvalancheScreen
+import com.cezila.feature_daily.DailyScreen
 import com.cezila.feature_home.HomeScreen
 import com.cezila.feature_stats.StatsScreen
 
@@ -16,7 +17,7 @@ fun NavGraphBuilder.palavraoNavigation() {
     }
 
     composable<PalavraoScreen.DailyScreen> {
-        PlaceholderScreen("Palavra do dia — em breve")
+        DailyScreen()
     }
 
     composable<PalavraoScreen.FriendChallengeScreen> {

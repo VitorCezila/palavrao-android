@@ -1,21 +1,20 @@
-package com.cezila.domain.use_case
+package com.cezila.domain.use_case.daily
 
+import com.cezila.domain.Result
 import com.cezila.domain.error.StartDailyRoundError
 import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
-import com.cezila.domain.repository.DailyWordRepository
-import com.cezila.domain.Result
-import java.time.LocalDate
+import com.cezila.domain.repository.daily.DailyWordRepository
 
-class StartDailyRoundUseCase(
+class FetchDailyRoundUseCase(
     private val dailyWordRepository: DailyWordRepository
 ) {
-    suspend operator fun invoke(date: LocalDate): Result<Round, StartDailyRoundError> {
-        return when (val wordRes = dailyWordRepository.fetchDaily(date)) {
+    suspend operator fun invoke(): Result<Round, StartDailyRoundError> {
+        return when (val wordRes = dailyWordRepository.fetchDaily()) {
             is Result.Error -> Result.Error(wordRes.error)
             is Result.Success -> Result.Success(
                 Round(
-                    target = wordRes.data,
+                    target = wordRes.data.word,
                     status = RoundStatus.IN_PROGRESS
                 )
             )

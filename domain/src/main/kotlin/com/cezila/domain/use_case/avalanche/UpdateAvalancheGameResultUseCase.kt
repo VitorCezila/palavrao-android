@@ -1,8 +1,8 @@
-package com.cezila.domain.use_case
+package com.cezila.domain.use_case.avalanche
 
-import com.cezila.domain.repository.AvalancheGameProgressRepository
+import com.cezila.domain.repository.avalanche.AvalancheGameProgressRepository
 
-class UpdateGameResultUseCase(
+class UpdateAvalancheGameResultUseCase(
     private val avalancheGameProgressRepository: AvalancheGameProgressRepository
 ) {
     suspend operator fun invoke(gameWon: Boolean) {

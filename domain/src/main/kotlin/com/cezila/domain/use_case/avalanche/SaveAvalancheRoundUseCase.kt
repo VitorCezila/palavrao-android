@@ -1,9 +1,9 @@
-package com.cezila.domain.use_case
+package com.cezila.domain.use_case.avalanche
 
 import com.cezila.domain.model.Round
-import com.cezila.domain.repository.AvalancheGameProgressRepository
+import com.cezila.domain.repository.avalanche.AvalancheGameProgressRepository
 
-class SaveRoundUseCase(
+class SaveAvalancheRoundUseCase(
     private val avalancheGameProgressRepository: AvalancheGameProgressRepository
 ) {
     suspend operator fun invoke(round: Round) =

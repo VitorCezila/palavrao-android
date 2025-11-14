@@ -1,9 +1,9 @@
-package com.cezila.domain.use_case
+package com.cezila.domain.use_case.avalanche
 
 import com.cezila.domain.error.StartAvalancheRoundError
 import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
-import com.cezila.domain.repository.AvalancheRepository
+import com.cezila.domain.repository.avalanche.AvalancheRepository
 import com.cezila.domain.Result
 
 class StartAvalancheRoundUseCase(
