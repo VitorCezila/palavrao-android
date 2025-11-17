@@ -14,6 +14,7 @@
     <string name="daily_description">📅 Palavra do Dia: Na palavra do dia seu objetivo é acertar com a menor quantidade de chutes possíveis.</string>
     <string name="daily_short_description" translatable="false">Daily Word</string>
 
+    <string name="challenge_title">CHALLENGE</string>
     <string name="challenge_mode">Desafiar Amigos</string>
     <string name="challenge_description">👥 Desafio: No modo desafio você deve acertar a palavra criada por um amigo.</string>
     <string name="challenge_short_description">Crie ou jogue desafios.</string>
@@ -27,7 +28,7 @@
     <string name="ok">OK</string>
     <string name="send">SEND</string>
     <string name="next">PROXIMO</string>
-    <string name="share">COMPARTILHAR</string>
+    <string name="share">SHARE</string>
 
     <!-- Avalanche Warnings -->
     <string name="round_already_finished">A rodada já terminou</string>

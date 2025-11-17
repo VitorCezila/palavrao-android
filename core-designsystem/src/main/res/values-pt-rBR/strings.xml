@@ -14,6 +14,7 @@
     <string name="daily_description">📅 Palavra do Dia: Na palavra do dia seu objetivo é acertar com a menor quantidade de chutes possíveis.</string>
     <string name="daily_short_description">Adivinhe a palavra de hoje.</string>
 
+    <string name="challenge_title">DESAFIO</string>
     <string name="challenge_mode">Desafiar Amigos</string>
     <string name="challenge_description">👥 Desafio: No modo desafio você deve acertar a palavra criada por um amigo.</string>
     <string name="challenge_short_description">Crie ou jogue desafios.</string>

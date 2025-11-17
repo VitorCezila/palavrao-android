@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.hilt)
     id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -24,10 +25,14 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+
     // jetpack
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
 
     api(libs.androidx.navigation.compose)
+
+    implementation(libs.kotlinx.serialization.json)
 }

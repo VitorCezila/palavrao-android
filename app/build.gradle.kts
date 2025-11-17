@@ -62,6 +62,7 @@ dependencies {
     implementation(project(":feature-daily"))
     implementation(project(":feature-home"))
     implementation(project(":feature-stats"))
+    implementation(project(":feature-challenge"))
 
     // jetpack
     implementation(libs.hilt.android)
