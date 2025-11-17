@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- default colors-->
-    <color name="pv_primary_dark">#E5E7EB</color>
+    <color name="pv_primary_dark">#D3DAD9</color>
     <color name="pv_onPrimary_dark">#000000</color>
     <color name="pv_background_dark">#37353E</color>
     <color name="pv_onBackground_dark">#E5E7EB</color>

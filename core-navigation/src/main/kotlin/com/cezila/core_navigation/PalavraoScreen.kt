@@ -1,6 +1,8 @@
 package com.cezila.core_navigation
 
+import com.cezila.domain.model.Round
 import kotlinx.serialization.Serializable
+import kotlin.reflect.typeOf
 
 sealed interface PalavraoScreen {
 
@@ -14,7 +16,16 @@ sealed interface PalavraoScreen {
     data object DailyScreen : PalavraoScreen
 
     @Serializable
-    data object FriendChallengeScreen : PalavraoScreen
+    data object FriendChallengeHomeScreen : PalavraoScreen
+
+    @Serializable
+    data class FriendChallengeScreen(
+        val round: Round
+    ) : PalavraoScreen {
+        companion object {
+            val typeMap = mapOf(typeOf<Round>() to RoundType)
+        }
+    }
 
     @Serializable
     data object StatsScreen : PalavraoScreen

@@ -17,7 +17,8 @@ fun RoundedButton(
     modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
-    fontSize: Int = 14
+    fontSize: Int = 14,
+    enabled: Boolean = true
 ) {
     Button(
         modifier = modifier
@@ -30,7 +31,8 @@ fun RoundedButton(
             disabledContainerColor = PalavraoTheme.colors.surface,
             disabledContentColor = PalavraoTheme.colors.primary
         ),
-        onClick = { onClick() }
+        onClick = { onClick() },
+        enabled = enabled
     ) {
         Text(
             text = text,
