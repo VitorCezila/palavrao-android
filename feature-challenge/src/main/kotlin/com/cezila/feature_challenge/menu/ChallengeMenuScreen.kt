@@ -1,4 +1,4 @@
-package com.cezila.feature_challenge
+package com.cezila.feature_challenge.menu
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -23,11 +23,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -36,18 +33,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.cezila.core_designsystem.R
 import com.cezila.core_designsystem.component.CustomWordTextField
-import com.cezila.core_designsystem.component.RoundedButton
 import com.cezila.core_designsystem.theme.PalavraoTheme
 import com.cezila.core_navigation.PalavraoScreen
 import com.cezila.core_navigation.currentComposeNavigator
@@ -63,7 +55,7 @@ fun ChallengeMenuScreen(
         vm.navigationEvent.collect { event ->
             when (event) {
                 is ChallengeNavigation.NavigateToGame -> {
-                    nav.navigate(PalavraoScreen.FriendChallengeScreen)
+                    nav.navigate(PalavraoScreen.FriendChallengeScreen(round = event.round))
                 }
             }
         }
@@ -169,23 +161,23 @@ fun ChallengeContent(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(
-                    modifier = Modifier
-                        .width(280.dp)
-                        .height(45.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonColors(
-                        containerColor = PalavraoTheme.colors.surface,
-                        contentColor = PalavraoTheme.colors.primary,
-                        disabledContainerColor = PalavraoTheme.colors.surface,
-                        disabledContentColor = PalavraoTheme.colors.primary
-                    ),
-                    onClick = { onEvent(ChallengeEvent.OnCreateChallengeClicked) },
-                    enabled = uiState.createWord.length == 5 && !uiState.isCreatingChallenge
-                ) {
-                    if (uiState.isCreatingChallenge) {
-                        CircularProgressIndicator()
-                    } else {
+                if(uiState.isCreatingChallenge) {
+                    CircularProgressIndicator()
+                } else {
+                    Button(
+                        modifier = Modifier
+                            .width(280.dp)
+                            .height(45.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonColors(
+                            containerColor = PalavraoTheme.colors.surface,
+                            contentColor = PalavraoTheme.colors.primary,
+                            disabledContainerColor = PalavraoTheme.colors.surface,
+                            disabledContentColor = PalavraoTheme.colors.primary
+                        ),
+                        onClick = { onEvent(ChallengeEvent.OnCreateChallengeClicked) },
+                        enabled = uiState.createWord.length == 5
+                    ) {
                         Text("GERAR CÓDIGO")
                     }
                 }
@@ -214,23 +206,23 @@ fun ChallengeContent(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Button(
-                    modifier = Modifier
-                        .width(280.dp)
-                        .height(45.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonColors(
-                        containerColor = PalavraoTheme.colors.surface,
-                        contentColor = PalavraoTheme.colors.primary,
-                        disabledContainerColor = PalavraoTheme.colors.surface,
-                        disabledContentColor = PalavraoTheme.colors.primary
-                    ),
-                    onClick = { onEvent(ChallengeEvent.OnStartChallengeClicked) },
-                    enabled = uiState.joinCode.length == 6 && !uiState.isStartingChallenge
-                ) {
-                    if (uiState.isStartingChallenge) {
-                        CircularProgressIndicator()
-                    } else {
+                if (uiState.isStartingChallenge) {
+                    CircularProgressIndicator()
+                } else {
+                    Button(
+                        modifier = Modifier
+                            .width(280.dp)
+                            .height(45.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonColors(
+                            containerColor = PalavraoTheme.colors.surface,
+                            contentColor = PalavraoTheme.colors.primary,
+                            disabledContainerColor = PalavraoTheme.colors.surface,
+                            disabledContentColor = PalavraoTheme.colors.primary
+                        ),
+                        onClick = { onEvent(ChallengeEvent.OnStartChallengeClicked) },
+                        enabled = uiState.joinCode.length == 6
+                    ) {
                         Text("INICIAR DESAFIO")
                     }
                 }

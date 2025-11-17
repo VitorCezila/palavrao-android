@@ -4,8 +4,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.cezila.core_navigation.PalavraoScreen
 import com.cezila.feature_avalanche.AvalancheScreen
-import com.cezila.feature_challenge.ChallengeMenuScreen
-import com.cezila.feature_challenge.ChallengeScreen
+import com.cezila.feature_challenge.menu.ChallengeMenuScreen
+import com.cezila.feature_challenge.game.ChallengeScreen
 import com.cezila.feature_daily.DailyScreen
 import com.cezila.feature_home.HomeScreen
 import com.cezila.feature_stats.StatsScreen
@@ -27,6 +27,7 @@ fun NavGraphBuilder.palavraoNavigation() {
     }
 
     composable<PalavraoScreen.FriendChallengeScreen>(
+        PalavraoScreen.FriendChallengeScreen.typeMap
     ) {
         ChallengeScreen()
     }

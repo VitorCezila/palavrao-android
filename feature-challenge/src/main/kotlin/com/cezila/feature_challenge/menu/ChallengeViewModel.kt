@@ -1,4 +1,4 @@
-package com.cezila.feature_challenge
+package com.cezila.feature_challenge.menu
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -48,18 +48,12 @@ class ChallengeViewModel @Inject constructor(
         }
     }
 
-    fun toggleHelp(show: Boolean) {
-        _uiState.update { it.copy(showHelp = show) }
-    }
-
     private fun createChallenge() {
         viewModelScope.launch {
             _uiState.update { it.copy(isCreatingChallenge = true) }
 
             val word = _uiState.value.createWord
-            val result = createFriendChallengeUseCase(word)
-
-            when (result) {
+            when (val result = createFriendChallengeUseCase(word)) {
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(
