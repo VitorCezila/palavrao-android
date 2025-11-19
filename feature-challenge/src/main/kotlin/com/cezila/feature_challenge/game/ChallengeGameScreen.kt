@@ -8,15 +8,18 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -87,7 +90,9 @@ fun ChallengeScreen(
         onKeyPressed = vm::onKey,
         onEnterPressed = vm::onEnter,
         onBackspacePressed = vm::onBackspace,
-        onTileSelected = vm::onTileSelected
+        onTileSelected = vm::onTileSelected,
+        onDismissEndDialog = vm::hideEndDialog,
+        onShowEndDialog = vm::showEndDialog
     )
 
 }
@@ -102,7 +107,9 @@ fun ChallengeGameScreenContent(
     onKeyPressed: (Char) -> Unit,
     onEnterPressed: () -> Unit,
     onBackspacePressed: () -> Unit,
-    onTileSelected: (Int) -> Unit
+    onTileSelected: (Int) -> Unit,
+    onDismissEndDialog: () -> Unit,
+    onShowEndDialog: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -164,13 +171,29 @@ fun ChallengeGameScreenContent(
                             onTileClick = onTileSelected
                         )
                     }
-                    RoundedButton(
-                        modifier = Modifier
-                            .width(120.dp)
-                            .height(45.dp),
-                        text = stringResource(R.string.send),
-                        onClick = { onEnterPressed() }
-                    )
+                    if (uiState.finished) {
+                        IconButton(
+                            onClick = { onShowEndDialog() },
+                            colors = IconButtonDefaults.iconButtonColors(
+                                contentColor = PalavraoTheme.colors.primary,
+                                containerColor = PalavraoTheme.colors.surface
+                            ),
+                            modifier = Modifier.size(45.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.BarChart,
+                                contentDescription = "Statistics"
+                            )
+                        }
+                    } else {
+                        RoundedButton(
+                            modifier = Modifier
+                                .width(120.dp)
+                                .height(45.dp),
+                            text = stringResource(R.string.send),
+                            onClick = { onEnterPressed() }
+                        )
+                    }
                     PalavraoKeyboard(
                         enabled = !uiState.finished,
                         onKey = onKeyPressed,
@@ -181,11 +204,11 @@ fun ChallengeGameScreenContent(
             }
         }
     }
-    if (uiState.finished) {
+    if (uiState.finished && uiState.isEndDialogVisible) {
         ChallengeEndGameDialog(
             uiState = uiState,
             onShare = onShare,
-            onDismiss = onBackPressed
+            onDismiss = onDismissEndDialog
         )
     }
     if (uiState.showHelp) {

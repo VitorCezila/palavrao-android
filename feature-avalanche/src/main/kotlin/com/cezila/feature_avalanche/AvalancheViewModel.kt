@@ -10,11 +10,11 @@ import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
 import com.cezila.domain.model.Word
 import com.cezila.domain.rules.GuessEvaluator
+import com.cezila.domain.use_case.SubmitGuessUseCase
 import com.cezila.domain.use_case.avalanche.GetAvalancheStatsUseCase
 import com.cezila.domain.use_case.avalanche.LoadCurrentAvalancheRoundUseCase
 import com.cezila.domain.use_case.avalanche.SaveAvalancheRoundUseCase
 import com.cezila.domain.use_case.avalanche.StartAvalancheRoundUseCase
-import com.cezila.domain.use_case.SubmitGuessUseCase
 import com.cezila.domain.use_case.avalanche.UpdateAvalancheGameResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -204,6 +204,14 @@ class AvalancheViewModel @Inject constructor(
         start()
     }
 
+    fun showEndDialog() {
+        _state.update { it.copy(isEndDialogVisible = true) }
+    }
+
+    fun hideEndDialog() {
+        _state.update { it.copy(isEndDialogVisible = false) }
+    }
+
     private fun mergeKeyStates(
         old: Map<Char, LetterState>,
         feedback: List<LetterFeedback>
@@ -241,7 +249,8 @@ data class AvalancheUiState(
     val startRoundFailed: Boolean = false,
     val showHelp: Boolean = false,
     val keyStates: Map<Char, LetterState> = emptyMap(),
-    val currentStreak: Int = 0
+    val currentStreak: Int = 0,
+    val isEndDialogVisible: Boolean = true
 )
 
 sealed interface AvalancheEvent {

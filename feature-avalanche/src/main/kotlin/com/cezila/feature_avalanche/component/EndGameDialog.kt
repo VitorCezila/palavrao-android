@@ -33,7 +33,8 @@ fun EndGameDialog(
     modifier: Modifier = Modifier,
     uiState: AvalancheUiState,
     onPlayAgain: () -> Unit,
-    onShare: () -> Unit
+    onShare: () -> Unit,
+    onDismissRequest: () -> Unit = {}
 ) {
     val title = if (uiState.won) "PARABÉNS \uD83C\uDF89\uD83C\uDF89" else "QUE PENA \uD83D\uDE14"
     val streakText = if (uiState.won) {
@@ -46,7 +47,7 @@ fun EndGameDialog(
         containerColor = PalavraoTheme.background.color,
         textContentColor = PalavraoTheme.colors.primary,
         titleContentColor = PalavraoTheme.colors.primary,
-        onDismissRequest = onPlayAgain,
+        onDismissRequest = { onDismissRequest() },
         title = {
             Text(
                 modifier = Modifier.fillMaxWidth(),
