@@ -82,9 +82,7 @@ class ChallengeViewModel @Inject constructor(
             _uiState.update { it.copy(isStartingChallenge = true) }
 
             val code = _uiState.value.joinCode
-            val result = startFriendRoundUseCase(code)
-
-            when (result) {
+            when (val result = startFriendRoundUseCase(code)) {
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(
@@ -92,7 +90,7 @@ class ChallengeViewModel @Inject constructor(
                             startError = null
                         )
                     }
-                    _navigationEvent.emit(ChallengeNavigation.NavigateToGame(result.data))
+                    _navigationEvent.emit(ChallengeNavigation.NavigateToGame(round = result.data, code = code))
                 }
                 is Result.Error -> {
                     _uiState.update {
@@ -127,5 +125,5 @@ sealed interface ChallengeEvent {
 }
 
 sealed interface ChallengeNavigation {
-    data class NavigateToGame(val round: Round) : ChallengeNavigation
+    data class NavigateToGame(val round: Round, val code: String) : ChallengeNavigation
 }

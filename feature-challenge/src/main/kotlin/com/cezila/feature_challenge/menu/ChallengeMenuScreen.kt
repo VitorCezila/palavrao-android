@@ -55,7 +55,12 @@ fun ChallengeMenuScreen(
         vm.navigationEvent.collect { event ->
             when (event) {
                 is ChallengeNavigation.NavigateToGame -> {
-                    nav.navigate(PalavraoScreen.FriendChallengeScreen(round = event.round))
+                    nav.navigate(
+                        PalavraoScreen.FriendChallengeScreen(
+                            round = event.round,
+                            code = event.code
+                        )
+                    )
                 }
             }
         }
@@ -161,7 +166,7 @@ fun ChallengeContent(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                if(uiState.isCreatingChallenge) {
+                if (uiState.isCreatingChallenge) {
                     CircularProgressIndicator()
                 } else {
                     Button(

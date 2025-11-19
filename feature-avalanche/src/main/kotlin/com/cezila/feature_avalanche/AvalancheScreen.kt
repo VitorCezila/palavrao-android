@@ -27,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -42,6 +43,7 @@ import com.cezila.core_designsystem.component.PalavraoKeyboard
 import com.cezila.core_designsystem.component.RoundedButton
 import com.cezila.core_designsystem.currentSnackbarHostState
 import com.cezila.core_designsystem.theme.PalavraoTheme
+import com.cezila.core_designsystem.utils.GameShareManager
 import com.cezila.core_navigation.currentComposeNavigator
 import com.cezila.domain.error.SubmitGuessError
 import com.cezila.feature_avalanche.component.EndGameDialog
@@ -54,6 +56,7 @@ fun AvalancheScreen(
     val composeNavigator = currentComposeNavigator
     val state by vm.state.collectAsState()
     val context = LocalContext.current
+    val shareManager = remember(context) { GameShareManager(context) }
 
     LaunchedEffect(key1 = Unit) {
         vm.start()
@@ -79,7 +82,12 @@ fun AvalancheScreen(
         uiState = state,
         onTryAgain = vm::start,
         onPlayAgain = vm::playAgain,
-        onShare = {},
+        onShare = {
+            shareManager.shareAvalanche(
+                word = vm.state.value.round?.target?.value,
+                streak = vm.state.value.currentStreak
+            )
+        },
         onBackPressed = composeNavigator::navigateUp,
         onToggleHelp = vm::toggleHelp,
         onKeyPressed = vm::onKey,

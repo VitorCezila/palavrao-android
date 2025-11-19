@@ -39,4 +39,11 @@
     <!-- Descriptions -->
     <string name="arrow_back_description">Voltar</string>
     <string name="help">Ajuda</string>
+
+    <!-- Share -->
+    <string name="share_toast_copied">Copiado para área de transferência</string>
+    <string name="share_avalanche_content">Joguei palavrao avalanche - palavra: %1$s\nStreak: %2$d 🔥</string>
+    <string name="share_daily_header">joguei palavrao %1$s %2$d/%3$d</string>
+    <string name="share_daily_streak_suffix">" 🔥 %1$d (streak)"</string>
+    <string name="share_challenge_header">joguei palavrao friend challenge %1$s %2$d/%3$d</string>
 </resources>
