@@ -238,6 +238,13 @@ class DailyViewModel @Inject constructor(
         return currentKeyStates
     }
 
+    fun showEndDialog() {
+        _state.update { it.copy(isEndDialogVisible = true) }
+    }
+
+    fun hideEndDialog() {
+        _state.update { it.copy(isEndDialogVisible = false) }
+    }
 }
 
 data class DailyUiState(
@@ -252,7 +259,8 @@ data class DailyUiState(
     val showHelp: Boolean = false,
     val keyStates: Map<Char, LetterState> = emptyMap(),
     val currentStreak: Int = 0,
-    val referenceDate: String = ""
+    val referenceDate: String = "",
+    val isEndDialogVisible: Boolean = true
 )
 
 sealed interface DailyEvent {

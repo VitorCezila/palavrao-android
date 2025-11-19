@@ -166,6 +166,13 @@ class ChallengeGameViewModel @Inject constructor(
         return m
     }
 
+    fun showEndDialog() {
+        _uiState.update { it.copy(isEndDialogVisible = true) }
+    }
+
+    fun hideEndDialog() {
+        _uiState.update { it.copy(isEndDialogVisible = false) }
+    }
 }
 
 data class ChallengeGameUiState(
@@ -177,7 +184,8 @@ data class ChallengeGameUiState(
     val won: Boolean = false,
     val showHelp: Boolean = false,
     val keyStates: Map<Char, LetterState> = emptyMap(),
-    val challengeCode: String = ""
+    val challengeCode: String = "",
+    val isEndDialogVisible: Boolean = true
 )
 
 sealed interface ChallengeGameEvent {

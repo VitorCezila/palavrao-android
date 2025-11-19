@@ -4,14 +4,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -19,6 +22,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -93,7 +97,9 @@ fun AvalancheScreen(
         onKeyPressed = vm::onKey,
         onEnterPressed = vm::onEnter,
         onBackspacePressed = vm::onBackspace,
-        onTileSelected = vm::onTileSelected
+        onTileSelected = vm::onTileSelected,
+        onDismissEndDialog = vm::hideEndDialog,
+        onShowEndDialog = vm::showEndDialog
     )
 }
 
@@ -109,7 +115,9 @@ fun AvalancheScreenContent(
     onKeyPressed: (Char) -> Unit,
     onEnterPressed: () -> Unit,
     onBackspacePressed: () -> Unit,
-    onTileSelected: (Int) -> Unit
+    onTileSelected: (Int) -> Unit,
+    onDismissEndDialog: () -> Unit,
+    onShowEndDialog: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -179,13 +187,45 @@ fun AvalancheScreenContent(
                                 onTileClick = onTileSelected
                             )
                         }
-                        RoundedButton(
-                            modifier = Modifier
-                                .width(120.dp)
-                                .height(45.dp),
-                            text = stringResource(R.string.send),
-                            onClick = { onEnterPressed() }
-                        )
+                        if (uiState.finished) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center,
+                                modifier = Modifier.padding(bottom = 8.dp)
+                            ) {
+                                RoundedButton(
+                                    modifier = Modifier
+                                        .width(120.dp)
+                                        .height(45.dp),
+                                    text = stringResource(R.string.next),
+                                    onClick = { onPlayAgain() }
+                                )
+
+                                Spacer(modifier = Modifier.width(12.dp))
+
+                                IconButton(
+                                    onClick = { onShowEndDialog() },
+                                    colors = IconButtonDefaults.iconButtonColors(
+                                        contentColor = PalavraoTheme.colors.primary,
+                                        containerColor = PalavraoTheme.colors.surface
+                                    ),
+                                    modifier = Modifier.size(45.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.BarChart,
+                                        contentDescription = "Statistics"
+                                    )
+                                }
+                            }
+                        } else {
+                            RoundedButton(
+                                modifier = Modifier
+                                    .width(120.dp)
+                                    .height(45.dp),
+                                text = stringResource(R.string.send),
+                                onClick = { onEnterPressed() }
+                            )
+                        }
                         PalavraoKeyboard(
                             enabled = !uiState.finished && uiState.round != null,
                             onKey = onKeyPressed,
@@ -197,11 +237,12 @@ fun AvalancheScreenContent(
             }
         }
     }
-    if (uiState.finished) {
+    if (uiState.finished && uiState.isEndDialogVisible) {
         EndGameDialog(
             uiState = uiState,
             onPlayAgain = onPlayAgain,
-            onShare = onShare
+            onShare = onShare,
+            onDismissRequest = onDismissEndDialog
         )
     }
     if (uiState.showHelp) {
@@ -259,7 +300,9 @@ private fun AvalancheScreenPreview() {
             onTryAgain = { },
             onPlayAgain = {},
             onShare = {},
-            onTileSelected = {}
+            onTileSelected = {},
+            onDismissEndDialog = {},
+            onShowEndDialog = {}
         )
     }
 }
@@ -282,7 +325,9 @@ private fun AvalancheScreenPreviewStartRoundFailed() {
             onTryAgain = {},
             onPlayAgain = {},
             onShare = {},
-            onTileSelected = {}
+            onTileSelected = {},
+            onDismissEndDialog = {},
+            onShowEndDialog = {}
         )
     }
 }
