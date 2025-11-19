@@ -11,5 +11,6 @@ data class Round(
     val attempts: List<Word> = emptyList(),
     val status: RoundStatus = RoundStatus.IN_PROGRESS,
     val lastResult: GuessResult? = null,
-    val referenceDate: String? = null
+    val referenceDate: String? = null,
+    val rules: GameRules = GameRules()
 ): Parcelable

@@ -20,7 +20,8 @@ sealed interface PalavraoScreen {
 
     @Serializable
     data class FriendChallengeScreen(
-        val round: Round
+        val round: Round,
+        val code: String
     ) : PalavraoScreen {
         companion object {
             val typeMap = mapOf(typeOf<Round>() to RoundType)

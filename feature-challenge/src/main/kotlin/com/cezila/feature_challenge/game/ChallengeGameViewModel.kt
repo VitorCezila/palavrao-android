@@ -52,6 +52,17 @@ class ChallengeGameViewModel @Inject constructor(
                 }
             }
             .launchIn(viewModelScope)
+        savedStateHandle.getStateFlow("code", initialValue = "")
+            .onEach { code ->
+                if (code.isNotEmpty()) {
+                    _uiState.update {
+                        it.copy(
+                            challengeCode = code
+                        )
+                    }
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     fun onTileSelected(index: Int) {
@@ -165,7 +176,8 @@ data class ChallengeGameUiState(
     val finished: Boolean = false,
     val won: Boolean = false,
     val showHelp: Boolean = false,
-    val keyStates: Map<Char, LetterState> = emptyMap()
+    val keyStates: Map<Char, LetterState> = emptyMap(),
+    val challengeCode: String = ""
 )
 
 sealed interface ChallengeGameEvent {

@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,6 +40,7 @@ import com.cezila.core_designsystem.component.PalavraoKeyboard
 import com.cezila.core_designsystem.component.RoundedButton
 import com.cezila.core_designsystem.currentSnackbarHostState
 import com.cezila.core_designsystem.theme.PalavraoTheme
+import com.cezila.core_designsystem.utils.GameShareManager
 import com.cezila.core_navigation.currentComposeNavigator
 import com.cezila.domain.error.SubmitGuessError
 import com.cezila.feature_challenge.game.components.ChallengeEndGameDialog
@@ -51,6 +53,7 @@ fun ChallengeScreen(
     val composeNavigator = currentComposeNavigator
     val state by vm.uiState.collectAsState()
     val context = LocalContext.current
+    val shareManager = remember(context) { GameShareManager(context) }
 
     LaunchedEffect(key1 = Unit) {
         vm.events.collect { event ->
@@ -73,7 +76,12 @@ fun ChallengeScreen(
 
     ChallengeGameScreenContent(
         uiState = state,
-        onShare = {},
+        onShare = {
+            shareManager.shareChallenge(
+                challengeCode = vm.uiState.value.challengeCode,
+                round = vm.uiState.value.round
+            )
+        },
         onBackPressed = composeNavigator::navigateUp,
         onToggleHelp = vm::toggleHelp,
         onKeyPressed = vm::onKey,

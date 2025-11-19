@@ -78,7 +78,7 @@ class DailyViewModel @Inject constructor(
                     is Result.Success -> it.data
                 }
             }
-            val savedRound = loadCurrentRound(dailyRound).let {
+            val savedRound = loadCurrentRound(dailyRound.round).let {
                 when (it) {
                     is Result.Error -> null
                     is Result.Success -> it.data
@@ -100,18 +100,20 @@ class DailyViewModel @Inject constructor(
                         currentInput = List(5) { null },
                         currentCursor = 0,
                         finished = savedRound.status != RoundStatus.IN_PROGRESS,
-                        won = savedRound.status == RoundStatus.WON
+                        won = savedRound.status == RoundStatus.WON,
+                        referenceDate = dailyRound.dailyInfo.referenceDate
                     )
                 }
             } else {
                 _state.update {
                     it.copy(
                         loading = false,
-                        round = dailyRound,
+                        round = dailyRound.round,
                         rows = emptyList(),
                         currentInput = List(5) { null },
                         currentCursor = 0,
-                        keyStates = emptyMap()
+                        keyStates = emptyMap(),
+                        referenceDate = dailyRound.dailyInfo.referenceDate
                     )
                 }
             }
@@ -249,7 +251,8 @@ data class DailyUiState(
     val startRoundFailed: Boolean = false,
     val showHelp: Boolean = false,
     val keyStates: Map<Char, LetterState> = emptyMap(),
-    val currentStreak: Int = 0
+    val currentStreak: Int = 0,
+    val referenceDate: String = ""
 )
 
 sealed interface DailyEvent {
