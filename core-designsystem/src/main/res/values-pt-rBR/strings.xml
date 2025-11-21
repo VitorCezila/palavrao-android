@@ -30,11 +30,16 @@
     <string name="next">PROXIMO</string>
     <string name="share">COMPARTILHAR</string>
 
-    <!-- Avalanche Warnings -->
+    <string name="try_again">TENTE NOVAMENTE</string>
+
+    <!-- Warnings -->
     <string name="round_already_finished">A rodada já terminou</string>
     <string name="invalid_length">A palavra deve ter 5 letras</string>
     <string name="invalid_chars">Caracteres inválidos</string>
     <string name="invalid_word">Essa palavra não existe</string>
+    <string name="challenge_not_found">Desafio não encontrado</string>
+    <string name="start_challenge_generic_error">Erro ao iniciar desafio</string>
+    <string name="create_challenge_generic_error">Erro ao criar desafio</string>
 
     <!-- Descriptions -->
     <string name="arrow_back_description">Voltar</string>

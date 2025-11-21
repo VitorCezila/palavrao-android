@@ -19,7 +19,8 @@ data class PalavraoColors(
     val focus: Color,
     val correct: Color,
     val present: Color,
-    val absent: Color
+    val absent: Color,
+    val error: Color
 ) {
     companion object {
         @Composable
@@ -35,7 +36,8 @@ data class PalavraoColors(
             focus = colorResource(R.color.pv_focus_dark),
             correct = colorResource(R.color.pv_correct),
             present = colorResource(R.color.pv_present),
-            absent = colorResource(R.color.pv_absent_dark)
+            absent = colorResource(R.color.pv_absent_dark),
+            error = colorResource(R.color.error)
         )
     }
 }

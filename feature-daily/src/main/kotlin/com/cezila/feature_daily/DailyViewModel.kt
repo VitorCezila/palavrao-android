@@ -245,6 +245,10 @@ class DailyViewModel @Inject constructor(
     fun hideEndDialog() {
         _state.update { it.copy(isEndDialogVisible = false) }
     }
+
+    fun hideErrorDialog() {
+        _state.update { it.copy(startRoundFailed = false, loading = true) }
+    }
 }
 
 data class DailyUiState(

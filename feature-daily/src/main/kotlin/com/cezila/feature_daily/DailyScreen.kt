@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.cezila.core_designsystem.R
+import com.cezila.core_designsystem.component.ErrorDialog
 import com.cezila.core_designsystem.component.HintRow
 import com.cezila.core_designsystem.component.PalavraoBoard
 import com.cezila.core_designsystem.component.PalavraoKeyboard
@@ -96,7 +97,9 @@ fun DailyScreen(
         onBackspacePressed = vm::onBackspace,
         onTileSelected = vm::onTileSelected,
         onDismissEndDialog = vm::hideEndDialog,
-        onShowEndDialog = vm::showEndDialog
+        onShowEndDialog = vm::showEndDialog,
+        onTryAgain = vm::start,
+        onDismissErrorDialog = vm::hideErrorDialog
     )
 }
 
@@ -112,7 +115,9 @@ fun DailyScreenContent(
     onBackspacePressed: () -> Unit,
     onTileSelected: (Int) -> Unit,
     onDismissEndDialog: () -> Unit,
-    onShowEndDialog: () -> Unit
+    onShowEndDialog: () -> Unit,
+    onTryAgain: () -> Unit,
+    onDismissErrorDialog: () -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -156,9 +161,14 @@ fun DailyScreenContent(
             when {
                 uiState.loading -> CircularProgressIndicator()
                 uiState.startRoundFailed -> {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Falha ao iniciar a rodada.")
-                    }
+                    ErrorDialog(
+                        onTryAgain = { onTryAgain() },
+                        onDismissRequest = {
+                            onBackPressed()
+                            onDismissErrorDialog()
+                        },
+                        description = "Não foi possivel buscar a palavra. Verifique sua conexão e tente novamente."
+                    )
                 }
                 else -> {
                     Column(

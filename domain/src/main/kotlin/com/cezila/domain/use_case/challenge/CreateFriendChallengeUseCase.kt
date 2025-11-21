@@ -12,7 +12,7 @@ class CreateFriendChallengeUseCase(
     private val friendChallengeRepository: FriendChallengeRepository
 ) {
     suspend operator fun invoke(rawWord: String): Result<String, CreateFriendChallengeError> {
-        val word = when (val r = Word.Companion.of(rawWord, 5)) {
+        val word = when (val r = Word.of(rawWord, 5)) {
             is Result.Success -> r.data
             is Result.Error -> return when (r.error) {
                 WordError.INVALID_LENGTH -> Result.Error(CreateFriendChallengeError.INVALID_LENGTH)

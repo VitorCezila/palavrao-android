@@ -26,6 +26,9 @@ class FriendChallengeRemoteRepository @Inject constructor(
             Result.Error(StartFriendRoundError.COMMUNICATION_ERROR)
         } catch (e: HttpException) {
             Log.e(TAG, "Error starting challenge (HTTP): $e")
+            if (e.code() == 404) {
+                return Result.Error(StartFriendRoundError.NOT_FOUND)
+            }
             Result.Error(StartFriendRoundError.COMMUNICATION_ERROR)
         } catch (e: Exception) {
             Log.e(TAG, "Error starting challenge (Generic): $e")
