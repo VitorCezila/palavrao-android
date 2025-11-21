@@ -10,6 +10,7 @@
     <color name="pv_surfaceVariant_dark">#1E2430</color>
     <color name="pv_outline_dark">#2E3645</color>
     <color name="pv_focus_dark">#D9E7D999</color>
+    <color name="error">#A62222</color>
 
     <!-- Game states (compartilhadas) -->
     <color name="pv_correct">#D96AAA64</color>

@@ -42,8 +42,13 @@ class ChallengeViewModel @Inject constructor(
             }
             is ChallengeEvent.OnCreateChallengeClicked -> createChallenge()
             is ChallengeEvent.OnStartChallengeClicked -> startChallenge()
-            is ChallengeEvent.OnErrorDialogDismissed -> {
-                _uiState.update { it.copy(createError = null, startError = null) }
+            is ChallengeEvent.OnErrorShown -> {
+                _uiState.update {
+                    it.copy(
+                        createError = null,
+                        startError = null
+                    )
+                }
             }
         }
     }
@@ -121,7 +126,7 @@ sealed interface ChallengeEvent {
     data class OnJoinCodeChanged(val code: String) : ChallengeEvent
     object OnCreateChallengeClicked : ChallengeEvent
     object OnStartChallengeClicked : ChallengeEvent
-    object OnErrorDialogDismissed : ChallengeEvent
+    object OnErrorShown : ChallengeEvent
 }
 
 sealed interface ChallengeNavigation {

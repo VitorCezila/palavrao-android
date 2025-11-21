@@ -16,7 +16,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.HelpOutline
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.cezila.core_designsystem.R
+import com.cezila.core_designsystem.component.ErrorDialog
 import com.cezila.core_designsystem.component.HintRow
 import com.cezila.core_designsystem.component.PalavraoBoard
 import com.cezila.core_designsystem.component.PalavraoKeyboard
@@ -161,13 +161,11 @@ fun AvalancheScreenContent(
             when {
                 uiState.loading -> CircularProgressIndicator()
                 uiState.startRoundFailed -> {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Falha ao iniciar a rodada.")
-                        Spacer(Modifier.height(8.dp))
-                        Button(onClick = onTryAgain) {
-                            Text("Tentar Novamente")
-                        }
-                    }
+                    ErrorDialog(
+                        onDismissRequest = { onBackPressed() },
+                        onTryAgain = { onTryAgain() },
+                        description = "Não foi possivel buscar a palavra, tente novamente mais tarde."
+                    )
                 }
 
                 else -> {
