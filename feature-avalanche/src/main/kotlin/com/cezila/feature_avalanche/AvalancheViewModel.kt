@@ -62,7 +62,8 @@ class AvalancheViewModel @Inject constructor(
                 currentInput = List(5) { null },
                 currentCursor = 0,
                 keyStates = emptyMap(),
-                finished = false
+                finished = false,
+                isEndDialogVisible = true
             )
         }
         viewModelScope.launch {
