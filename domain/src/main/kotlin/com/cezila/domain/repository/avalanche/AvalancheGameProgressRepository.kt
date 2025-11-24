@@ -13,4 +13,5 @@ interface AvalancheGameProgressRepository {
     fun getAvalancheStats(): Flow<AvalancheStats>
     suspend fun updateAvalancheStats(gameWon: Boolean)
 
+    suspend fun clearStats()
 }

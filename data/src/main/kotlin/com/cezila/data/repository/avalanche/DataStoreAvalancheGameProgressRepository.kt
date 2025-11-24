@@ -71,4 +71,11 @@ class DataStoreAvalancheGameProgressRepository(
             prefs[Keys.AVALANCHE_STATS] = json.encodeToString(newStats)
         }
     }
+
+    override suspend fun clearStats() {
+        dataStore.edit { preferences ->
+            preferences.remove(Keys.AVALANCHE_STATS)
+            preferences.remove(Keys.AVALANCHE_CURRENT_ROUND)
+        }
+    }
 }

@@ -72,4 +72,10 @@ class DataStoreDailyGameProgressRepository(
             prefs[Keys.DAILY_STATS] = json.encodeToString(newStats)
         }
     }
+
+    override suspend fun clearDailyStats() {
+        dataStore.edit { prefs ->
+            prefs.remove(Keys.DAILY_STATS)
+        }
+    }
 }

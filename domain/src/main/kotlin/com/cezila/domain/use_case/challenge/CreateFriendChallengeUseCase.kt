@@ -3,15 +3,16 @@ package com.cezila.domain.use_case.challenge
 import com.cezila.domain.Result
 import com.cezila.domain.error.CreateFriendChallengeError
 import com.cezila.domain.error.WordError
+import com.cezila.domain.model.Language
 import com.cezila.domain.model.Word
 import com.cezila.domain.repository.DictionaryRepository
-import com.cezila.domain.repository.FriendChallengeRepository
+import com.cezila.domain.repository.challenge.FriendChallengeRepository
 
 class CreateFriendChallengeUseCase(
     private val dictionaryRepository: DictionaryRepository,
     private val friendChallengeRepository: FriendChallengeRepository
 ) {
-    suspend operator fun invoke(rawWord: String): Result<String, CreateFriendChallengeError> {
+    suspend operator fun invoke(rawWord: String, language: Language): Result<String, CreateFriendChallengeError> {
         val word = when (val r = Word.of(rawWord, 5)) {
             is Result.Success -> r.data
             is Result.Error -> return when (r.error) {
@@ -20,7 +21,7 @@ class CreateFriendChallengeUseCase(
             }
         }
 
-        if (!dictionaryRepository.isWordValid(word)) {
+        if (!dictionaryRepository.isWordValid(word, language)) {
             return Result.Error(CreateFriendChallengeError.INVALID_WORD)
         }
 

@@ -4,7 +4,7 @@ import com.cezila.domain.Result
 import com.cezila.domain.error.StartFriendRoundError
 import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
-import com.cezila.domain.repository.FriendChallengeRepository
+import com.cezila.domain.repository.challenge.FriendChallengeRepository
 
 class StartFriendRoundUseCase(
     private val friendChallengeRepository: FriendChallengeRepository

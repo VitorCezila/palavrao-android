@@ -6,6 +6,7 @@ import com.cezila.domain.Result
 import com.cezila.domain.error.CreateFriendChallengeError
 import com.cezila.domain.error.StartFriendRoundError
 import com.cezila.domain.model.Round
+import com.cezila.domain.repository.SettingsRepository
 import com.cezila.domain.use_case.challenge.CreateFriendChallengeUseCase
 import com.cezila.domain.use_case.challenge.StartFriendRoundUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,6 +14,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -21,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ChallengeViewModel @Inject constructor(
     private val createFriendChallengeUseCase: CreateFriendChallengeUseCase,
-    private val startFriendRoundUseCase: StartFriendRoundUseCase
+    private val startFriendRoundUseCase: StartFriendRoundUseCase,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ChallengeUiState())
@@ -55,10 +58,11 @@ class ChallengeViewModel @Inject constructor(
 
     private fun createChallenge() {
         viewModelScope.launch {
+            val currentLang = settingsRepository.getLanguage().first()
             _uiState.update { it.copy(isCreatingChallenge = true) }
 
             val word = _uiState.value.createWord
-            when (val result = createFriendChallengeUseCase(word)) {
+            when (val result = createFriendChallengeUseCase(word, currentLang)) {
                 is Result.Success -> {
                     _uiState.update {
                         it.copy(

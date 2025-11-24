@@ -1,15 +1,11 @@
 package com.cezila.data.di
 
-import com.cezila.data.repository.AssetsDictionaryRepository
 import com.cezila.data.repository.challenge.FriendChallengeRemoteRepository
 import com.cezila.data.service.IChallengeService
-import com.cezila.data.service.IDailyService
 import com.cezila.domain.repository.DictionaryRepository
-import com.cezila.domain.repository.FriendChallengeRepository
-import com.cezila.domain.repository.daily.DailyWordRepository
+import com.cezila.domain.repository.challenge.FriendChallengeRepository
 import com.cezila.domain.use_case.challenge.CreateFriendChallengeUseCase
 import com.cezila.domain.use_case.challenge.StartFriendRoundUseCase
-import com.cezila.domain.use_case.daily.FetchDailyRoundUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

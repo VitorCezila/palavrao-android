@@ -7,7 +7,7 @@ import com.cezila.domain.Result
 import com.cezila.domain.error.CreateFriendChallengeError
 import com.cezila.domain.error.StartFriendRoundError
 import com.cezila.domain.model.Word
-import com.cezila.domain.repository.FriendChallengeRepository
+import com.cezila.domain.repository.challenge.FriendChallengeRepository
 import okio.IOException
 import retrofit2.HttpException
 import javax.inject.Inject

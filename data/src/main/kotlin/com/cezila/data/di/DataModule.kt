@@ -8,7 +8,9 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.cezila.data.BuildConfig
 import com.cezila.data.repository.AssetsDictionaryRepository
+import com.cezila.data.repository.DataStoreSettingsRepository
 import com.cezila.domain.repository.DictionaryRepository
+import com.cezila.domain.repository.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,22 +32,31 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun provideDictionaryRepository(app: Application): DictionaryRepository =
-        AssetsDictionaryRepository(app.assets)
+    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
+        return PreferenceDataStoreFactory.create(
+            produceFile = { context.preferencesDataStoreFile(USER_PREFERENCES) }
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(
+        dataStore: DataStore<Preferences>
+    ): SettingsRepository =
+        DataStoreSettingsRepository(dataStore = dataStore)
+
+    @Provides
+    @Singleton
+    fun provideDictionaryRepository(
+        app: Application
+    ): DictionaryRepository =
+        AssetsDictionaryRepository(assets = app.assets)
 
     @Provides
     @Singleton
     fun provideJson(): Json = Json {
         ignoreUnknownKeys = true
         prettyPrint = false
-    }
-
-    @Provides
-    @Singleton
-    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create(
-            produceFile = { context.preferencesDataStoreFile(USER_PREFERENCES) }
-        )
     }
 
     @Provides

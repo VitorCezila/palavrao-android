@@ -9,6 +9,7 @@ import com.cezila.domain.model.RoundStatus
 import com.cezila.domain.model.Word
 import com.cezila.domain.repository.DictionaryRepository
 import com.cezila.domain.Result
+import com.cezila.domain.model.Language
 import com.cezila.domain.rules.GuessEvaluator
 
 class SubmitGuessUseCase(
@@ -16,7 +17,11 @@ class SubmitGuessUseCase(
     private val rules: GameRules = GameRules()
 ) {
 
-    operator fun invoke(round: Round, rawGuess: String): Result<GuessOutput, SubmitGuessError> {
+    operator fun invoke(
+        round: Round,
+        rawGuess: String,
+        language: Language
+    ): Result<GuessOutput, SubmitGuessError> {
         if (round.status != RoundStatus.IN_PROGRESS) return Result.Error(SubmitGuessError.ROUND_FINISHED)
 
         val guess = when (val wRes = Word.of(rawGuess, rules.wordLength)) {
@@ -26,8 +31,9 @@ class SubmitGuessUseCase(
                 WordError.INVALID_CHARS -> return Result.Error(SubmitGuessError.INVALID_CHARS)
             }
         }
-
-        if (!dictionaryRepository.isWordValid(guess)) return Result.Error(SubmitGuessError.INVALID_WORD)
+        if (!dictionaryRepository.isWordValid(guess, language)) {
+            return Result.Error(SubmitGuessError.INVALID_WORD)
+        }
 
         val result = GuessEvaluator.evaluate(guess, round.target)
         val attempts = round.attempts + guess
