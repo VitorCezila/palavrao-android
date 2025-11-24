@@ -2,6 +2,7 @@ package com.cezila.feature_challenge.menu
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,11 +38,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -50,6 +53,7 @@ import com.cezila.core_designsystem.R
 import com.cezila.core_designsystem.component.CustomWordTextField
 import com.cezila.core_designsystem.currentSnackbarHostState
 import com.cezila.core_designsystem.theme.PalavraoTheme
+import com.cezila.core_designsystem.utils.GameShareManager
 import com.cezila.core_navigation.PalavraoScreen
 import com.cezila.core_navigation.currentComposeNavigator
 import com.cezila.domain.error.CreateFriendChallengeError
@@ -64,6 +68,7 @@ fun ChallengeMenuScreen(
     val uiState by vm.uiState.collectAsState()
     val snackbarHostState = currentSnackbarHostState
     val context = LocalContext.current
+    val shareManager = remember(context) { GameShareManager(context) }
 
     LaunchedEffect(Unit) {
         vm.navigationEvent.collect { event ->
@@ -111,7 +116,10 @@ fun ChallengeMenuScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
         onEvent = vm::onEvent,
-        onBackPressed = nav::navigateUp
+        onBackPressed = nav::navigateUp,
+        onGeneratedCodeClicked = { text ->
+            shareManager.copyToClipboard(text)
+        }
     )
 }
 
@@ -121,7 +129,8 @@ fun ChallengeContent(
     uiState: ChallengeUiState,
     snackbarHostState: SnackbarHostState? = null,
     onEvent: (ChallengeEvent) -> Unit,
-    onBackPressed: () -> Unit = {}
+    onGeneratedCodeClicked: (String) -> Unit,
+    onBackPressed: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -174,7 +183,7 @@ fun ChallengeContent(
                     .verticalScroll(rememberScrollState())
             ) {
                 Text(
-                    text = "Desafiar Amigos",
+                    text = stringResource(R.string.challenge_mode),
                     fontWeight = FontWeight.Bold,
                     color = PalavraoTheme.colors.primary,
                     fontSize = 24.sp,
@@ -193,7 +202,7 @@ fun ChallengeContent(
                             .wrapContentWidth()
                             .wrapContentHeight(),
                         text = uiState.createWord,
-                        hint = "Digite uma palavra (5 letras)",
+                        hint = stringResource(R.string.type_a_word_hint),
                         onValueChange = { onEvent(ChallengeEvent.OnCreateWordChanged(it)) },
                         enabled = !uiState.isCreatingChallenge
                     )
@@ -202,8 +211,12 @@ fun ChallengeContent(
 
                     if (uiState.generatedCode != null) {
                         Text(
+                            modifier = Modifier.clickable(
+                                enabled = true,
+                                onClick = { onGeneratedCodeClicked(uiState.generatedCode) }),
                             text = uiState.generatedCode,
-                            color = PalavraoTheme.colors.primary
+                            color = PalavraoTheme.colors.primary,
+                            textDecoration = TextDecoration.Underline
                         )
                     }
                 }
@@ -211,7 +224,9 @@ fun ChallengeContent(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (uiState.isCreatingChallenge) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(
+                        color = PalavraoTheme.colors.primary
+                    )
                 } else {
                     Button(
                         modifier = Modifier
@@ -227,14 +242,14 @@ fun ChallengeContent(
                         onClick = { onEvent(ChallengeEvent.OnCreateChallengeClicked) },
                         enabled = uiState.createWord.length == 5
                     ) {
-                        Text("GERAR CÓDIGO")
+                        Text(stringResource(R.string.generate_code_button))
                     }
                 }
 
                 Spacer(modifier = Modifier.height(80.dp))
 
                 Text(
-                    text = "Jogar Desafio",
+                    text = stringResource(R.string.play_challenge_title),
                     fontWeight = FontWeight.Bold,
                     color = PalavraoTheme.colors.primary,
                     fontSize = 24.sp,
@@ -248,7 +263,7 @@ fun ChallengeContent(
                         .wrapContentWidth()
                         .wrapContentHeight(),
                     text = uiState.joinCode,
-                    hint = "Digite o código do desafio",
+                    hint = stringResource(R.string.join_code_hint),
                     onValueChange = { onEvent(ChallengeEvent.OnJoinCodeChanged(it)) },
                     enabled = !uiState.isStartingChallenge
                 )
@@ -256,7 +271,7 @@ fun ChallengeContent(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 if (uiState.isStartingChallenge) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(color = PalavraoTheme.colors.primary)
                 } else {
                     Button(
                         modifier = Modifier
@@ -272,7 +287,7 @@ fun ChallengeContent(
                         onClick = { onEvent(ChallengeEvent.OnStartChallengeClicked) },
                         enabled = uiState.joinCode.length == 6
                     ) {
-                        Text("INICIAR DESAFIO")
+                        Text(stringResource(R.string.start_challenge_button))
                     }
                 }
             }
@@ -286,7 +301,8 @@ private fun ChallengeContentPreview() {
     PalavraoTheme {
         ChallengeContent(
             uiState = ChallengeUiState(),
-            onEvent = {}
+            onEvent = {},
+            onGeneratedCodeClicked = {},
         )
     }
 }

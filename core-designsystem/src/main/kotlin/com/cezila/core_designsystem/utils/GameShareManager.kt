@@ -58,7 +58,7 @@ class GameShareManager(private val context: Context) {
         copyToClipboard(finalText)
     }
 
-    private fun copyToClipboard(text: String) {
+    fun copyToClipboard(text: String) {
         val clip = ClipData.newPlainText("share_text", text)
         clipboardManager.setPrimaryClip(clip)
         Toast.makeText(

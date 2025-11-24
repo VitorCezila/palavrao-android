@@ -159,12 +159,14 @@ fun AvalancheScreenContent(
             contentAlignment = Alignment.Center
         ) {
             when {
-                uiState.loading -> CircularProgressIndicator()
+                uiState.loading -> CircularProgressIndicator(
+                    color = PalavraoTheme.colors.primary
+                )
                 uiState.startRoundFailed -> {
                     ErrorDialog(
                         onDismissRequest = { onBackPressed() },
                         onTryAgain = { onTryAgain() },
-                        description = "Não foi possivel buscar a palavra, tente novamente mais tarde."
+                        description = stringResource(R.string.could_not_fetch_word_try_again_later)
                     )
                 }
 

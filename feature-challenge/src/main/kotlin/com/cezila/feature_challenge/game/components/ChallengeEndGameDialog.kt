@@ -28,7 +28,12 @@ fun ChallengeEndGameDialog(
     onShare: () -> Unit,
     onDismiss: () -> Unit
 ) {
-    val title = if (uiState.won) "PARABÉNS \uD83C\uDF89\uD83C\uDF89" else "QUE PENA \uD83D\uDE14"
+    val title = if (uiState.won) {
+        stringResource(R.string.game_won_title)
+    } else {
+        stringResource(R.string.game_lost_title)
+    }
+
     AlertDialog(
         modifier = modifier,
         containerColor = PalavraoTheme.background.color,
@@ -52,7 +57,7 @@ fun ChallengeEndGameDialog(
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "A palavra era:",
+                    text = stringResource(R.string.the_word_was),
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Center
                 )

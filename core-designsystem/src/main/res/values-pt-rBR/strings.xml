@@ -40,6 +40,7 @@
     <string name="challenge_not_found">Desafio não encontrado</string>
     <string name="start_challenge_generic_error">Erro ao iniciar desafio</string>
     <string name="create_challenge_generic_error">Erro ao criar desafio</string>
+    <string name="could_not_fetch_word_try_again_later">Não foi possível buscar a palavra, tente novamente mais tarde.</string>
 
     <!-- Descriptions -->
     <string name="arrow_back_description">Voltar</string>
@@ -51,4 +52,23 @@
     <string name="share_daily_header">joguei palavrao %1$s %2$d/%3$d</string>
     <string name="share_daily_streak_suffix">" 🔥 %1$d (streak)"</string>
     <string name="share_challenge_header">joguei palavrao friend challenge %1$s %2$d/%3$d</string>
+
+    <!-- End Game Dialog -->
+    <string name="game_won_title">PARABÉNS 🎉🎉</string>
+    <string name="game_lost_title">QUE PENA 😔</string>
+    <string name="streak_current_format">Sequência Atual: %1$d 🔥</string>
+    <string name="streak_broken">Sequência Quebrada 🚒</string>
+    <string name="the_word_was">A palavra era:</string>
+
+    <!-- Challenge Screen -->
+    <string name="type_a_word_hint">Digite uma palavra (5 letras)</string>
+    <string name="generate_code_button">GERAR CÓDIGO</string>
+    <string name="play_challenge_title">Jogar Desafio</string>
+    <string name="join_code_hint">Digite o código do desafio</string>
+    <string name="start_challenge_button">INICIAR DESAFIO</string>
+
+    <!-- Stats Screen  -->
+    <string name="games_played">Jogos Jogados</string>
+    <string name="current_streak">Sequência Atual</string>
+    <string name="best_streak">Maior Sequência</string>
 </resources>
