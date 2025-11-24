@@ -2,6 +2,7 @@ package com.cezila.data.dto.response
 
 import com.cezila.domain.model.Word
 import com.cezila.domain.model.daily.DailyWordInfo
+import com.cezila.domain.utils.DateUtils
 import com.google.gson.annotations.SerializedName
 
 
@@ -12,8 +13,8 @@ data class DailyWordResponse(
 
 fun DailyWordResponse.toModel(): DailyWordInfo {
     return DailyWordInfo(
-        word = Word.Companion.w(dailyWord),
-        referenceDate = referenceDate
+        word = Word.w(dailyWord),
+        referenceDate = DateUtils.toDayString(this.referenceDate)
     )
 }
 

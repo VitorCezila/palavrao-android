@@ -16,8 +16,11 @@ class LoadCurrentDailyRoundUseCase(
 
         val localRound = dailyGameProgressRepository.getDailyCurrentRound().first()
 
-        if (localRound == null || localRound.referenceDate != remoteRound.referenceDate) {
-
+        if (
+            localRound == null ||
+            localRound.referenceDate == null ||
+            localRound.referenceDate != remoteRound.referenceDate
+        ) {
             if (localRound != null) {
                 Log.d("LoadCurrentDailyRoundUseCase", "Local round exist but not up to date")
                 dailyGameProgressRepository.clearDailyCurrentRound()

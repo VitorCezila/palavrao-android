@@ -11,9 +11,8 @@ import com.cezila.domain.model.RoundStatus
 import com.cezila.domain.model.Word
 import com.cezila.domain.rules.GuessEvaluator
 import com.cezila.domain.use_case.SubmitGuessUseCase
-import com.cezila.domain.use_case.daily.FetchDailyRoundUseCase
+import com.cezila.domain.use_case.daily.GetDailyGameSessionUseCase
 import com.cezila.domain.use_case.daily.GetDailyStatsUseCase
-import com.cezila.domain.use_case.daily.LoadCurrentDailyRoundUseCase
 import com.cezila.domain.use_case.daily.SaveDailyRoundUseCase
 import com.cezila.domain.use_case.daily.UpdateDailyGameResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,9 +29,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DailyViewModel @Inject constructor(
-    private val fetchDailyRound: FetchDailyRoundUseCase,
+    private val getDailyGameSession: GetDailyGameSessionUseCase,
     private val submitGuess: SubmitGuessUseCase,
-    private val loadCurrentRound: LoadCurrentDailyRoundUseCase,
     private val saveRound: SaveDailyRoundUseCase,
     private val updateGameResult: UpdateDailyGameResultUseCase,
     getDailyStats: GetDailyStatsUseCase
@@ -65,56 +63,17 @@ class DailyViewModel @Inject constructor(
                 finished = false
             )
         }
+
         viewModelScope.launch {
-            val dailyRound = fetchDailyRound().let {
-                when (it) {
-                    is Result.Error -> {
-                        _state.update { state ->
-                            state.copy(loading = false, startRoundFailed = true)
-                        }
-                        return@launch
+            when (val result = getDailyGameSession()) {
+                is Result.Error -> {
+                    _state.update { state ->
+                        state.copy(loading = false, startRoundFailed = true)
                     }
+                }
 
-                    is Result.Success -> it.data
-                }
-            }
-            val savedRound = loadCurrentRound(dailyRound.round).let {
-                when (it) {
-                    is Result.Error -> null
-                    is Result.Success -> it.data
-                }
-            }
-            if (savedRound != null) {
-                val rows = savedRound.attempts.map { attempt ->
-                    val result = GuessEvaluator.evaluate(attempt, savedRound.target)
-                    result.feedback.map { it.letter to it.state }
-                }
-                val keyStates = mergeKeyStatesFromAttempts(savedRound.attempts, savedRound.target)
-
-                _state.update {
-                    it.copy(
-                        loading = false,
-                        round = savedRound,
-                        rows = rows,
-                        keyStates = keyStates,
-                        currentInput = List(5) { null },
-                        currentCursor = 0,
-                        finished = savedRound.status != RoundStatus.IN_PROGRESS,
-                        won = savedRound.status == RoundStatus.WON,
-                        referenceDate = dailyRound.dailyInfo.referenceDate
-                    )
-                }
-            } else {
-                _state.update {
-                    it.copy(
-                        loading = false,
-                        round = dailyRound.round,
-                        rows = emptyList(),
-                        currentInput = List(5) { null },
-                        currentCursor = 0,
-                        keyStates = emptyMap(),
-                        referenceDate = dailyRound.dailyInfo.referenceDate
-                    )
+                is Result.Success -> {
+                    restoreGameState(result.data)
                 }
             }
         }
@@ -211,6 +170,28 @@ class DailyViewModel @Inject constructor(
 
     fun toggleHelp(show: Boolean) {
         _state.update { it.copy(showHelp = show) }
+    }
+
+    private fun restoreGameState(round: Round) {
+        val rows = round.attempts.map { attempt ->
+            val result = GuessEvaluator.evaluate(attempt, round.target)
+            result.feedback.map { it.letter to it.state }
+        }
+        val keyStates = mergeKeyStatesFromAttempts(round.attempts, round.target)
+
+        _state.update {
+            it.copy(
+                loading = false,
+                round = round,
+                rows = rows,
+                keyStates = keyStates,
+                currentInput = List(5) { null },
+                currentCursor = 0,
+                finished = round.status != RoundStatus.IN_PROGRESS,
+                won = round.status == RoundStatus.WON,
+                referenceDate = round.referenceDate ?: ""
+            )
+        }
     }
 
     private fun mergeKeyStates(
