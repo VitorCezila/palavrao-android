@@ -159,7 +159,7 @@ fun DailyScreenContent(
             contentAlignment = Alignment.Center
         ) {
             when {
-                uiState.loading -> CircularProgressIndicator()
+                uiState.loading -> CircularProgressIndicator(color = PalavraoTheme.colors.primary)
                 uiState.startRoundFailed -> {
                     ErrorDialog(
                         onTryAgain = { onTryAgain() },
@@ -167,7 +167,7 @@ fun DailyScreenContent(
                             onBackPressed()
                             onDismissErrorDialog()
                         },
-                        description = "Não foi possivel buscar a palavra. Verifique sua conexão e tente novamente."
+                        description =  stringResource(R.string.could_not_fetch_word_try_again_later)
                     )
                 }
                 else -> {

@@ -35,7 +35,8 @@ fun CustomWordTextField(
             focusedPlaceholderColor = PalavraoTheme.colors.primary,
             unfocusedPlaceholderColor = PalavraoTheme.colors.primary,
             focusedBorderColor = PalavraoTheme.colors.primary,
-            unfocusedBorderColor = PalavraoTheme.colors.primary
+            unfocusedBorderColor = PalavraoTheme.colors.primary,
+            disabledTextColor = PalavraoTheme.colors.primary
         ),
         singleLine = isSingleLine,
         enabled = enabled

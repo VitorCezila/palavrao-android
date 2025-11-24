@@ -35,11 +35,16 @@ fun DailyEndGameDialog(
     onShare: () -> Unit,
     onDismissRequest: () -> Unit = {}
 ) {
-    val title = if (uiState.won) "PARABÉNS \uD83C\uDF89\uD83C\uDF89" else "QUE PENA \uD83D\uDE14"
-    val streakText = if (uiState.won) {
-        "Sequência Atual: ${uiState.currentStreak} 🔥"
+    val title = if (uiState.won) {
+        stringResource(R.string.game_won_title)
     } else {
-        "Sequência Quebrada \uD83D\uDE92"
+        stringResource(R.string.game_lost_title)
+    }
+
+    val streakText = if (uiState.won) {
+        stringResource(R.string.streak_current_format, uiState.currentStreak)
+    } else {
+        stringResource(R.string.streak_broken)
     }
     AlertDialog(
         modifier = modifier,
@@ -64,7 +69,7 @@ fun DailyEndGameDialog(
             ) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = "A palavra era:",
+                    text = stringResource(R.string.the_word_was),
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Center
                 )

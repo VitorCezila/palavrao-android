@@ -57,7 +57,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         onFriendChallengeClick = { nav.navigate(PalavraoScreen.FriendChallengeHomeScreen) },
         onStatsClick = { nav.navigate(PalavraoScreen.StatsScreen) },
         onSettingsClick = { nav.navigate(PalavraoScreen.SettingsScreen) },
-        onToggleHelp = { it ->
+        onToggleHelp = {
             showHelp.value = it
         },
         showHelp.value
@@ -108,7 +108,7 @@ fun HomeContent(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = stringResource(R.string.app_name),
+                text = stringResource(R.string.app_name).uppercase(),
                 fontWeight = FontWeight.Bold,
                 color = PalavraoTheme.colors.primary,
                 fontSize = 36.sp,
