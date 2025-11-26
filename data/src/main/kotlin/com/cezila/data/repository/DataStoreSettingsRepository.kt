@@ -1,5 +1,6 @@
 package com.cezila.data.repository
 
+import android.util.Log
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -8,6 +9,7 @@ import com.cezila.domain.model.Language
 import com.cezila.domain.repository.SettingsRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.util.Locale
 
 class DataStoreSettingsRepository(
     private val dataStore: DataStore<Preferences>
@@ -19,8 +21,19 @@ class DataStoreSettingsRepository(
 
     override fun getLanguage(): Flow<Language> {
         return dataStore.data.map { prefs ->
-            val code = prefs[Keys.LANGUAGE] ?: Language.PT.code
-            Language.entries.find { it.code == code } ?: Language.PT
+            val savedCode = prefs[Keys.LANGUAGE]
+
+            if (savedCode != null) {
+                Language.entries.find { it.code == savedCode } ?: Language.PT
+            } else {
+                val systemLanguage = Locale.getDefault().language
+                Log.i("DataStoreSettings", "System language: $systemLanguage")
+                if (systemLanguage.equals("pt", ignoreCase = true)) {
+                    Language.PT
+                } else {
+                    Language.EN
+                }
+            }
         }
     }
 
