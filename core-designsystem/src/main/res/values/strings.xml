@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PALAVRAO</string>
-    <string name="app_description">Palavrao has three different game modes for you to enjoy.</string>
+    <string name="app_name">WORDIFY</string>
+    <string name="app_description">Wordify has three different game modes for you to enjoy.</string>
 
     <!-- Game Modes -->
     <string name="avalanche_title">AVALANCHE</string>
@@ -11,8 +11,8 @@
 
     <string name="daily_title">DAILY</string>
     <string name="daily_mode">Daily Word</string>
-    <string name="daily_description">📅 Word of the Day: In word of the day, your goal is to guess correctly with the fewest attempts possible.</string>
-    <string name="daily_short_description">Daily Word</string>
+    <string name="daily_description">📅 Daily Word: In Daily Word, your goal is to guess correctly with the fewest attempts possible.</string>
+    <string name="daily_short_description">Daily Word (Portuguese Only)</string>
 
     <string name="challenge_title">CHALLENGE</string>
     <string name="challenge_mode">Challenge Friends</string>
@@ -48,10 +48,10 @@
 
     <!-- Share -->
     <string name="share_toast_copied">Copied to clipboard</string>
-    <string name="share_avalanche_content">I played Palavrao Avalanche - word: %1$s\nStreak: %2$d 🔥</string>
-    <string name="share_daily_header">I played Palavrao %1$s %2$d/%3$d</string>
+    <string name="share_avalanche_content">I played Wordify Avalanche - word: %1$s\nStreak: %2$d 🔥</string>
+    <string name="share_daily_header">I played Wordify %1$s %2$d/%3$d</string>
     <string name="share_daily_streak_suffix">" 🔥 %1$d (streak)"</string>
-    <string name="share_challenge_header">I played Palavrao friend challenge %1$s %2$d/%3$d</string>
+    <string name="share_challenge_header">I played Wordify friend challenge %1$s %2$d/%3$d</string>
 
     <string name="game_won_title">CONGRATULATIONS 🎉🎉</string>
     <string name="game_lost_title">TOO BAD 😔</string>
@@ -69,4 +69,21 @@
     <string name="games_played">Games Played</string>
     <string name="current_streak">Current Streak</string>
     <string name="best_streak">Best Streak</string>
+
+    <!-- Settings Screen -->
+    <string name="unknown">Unknown</string>
+    <string name="dictionary_title">Dictionary (Avalanche/Challenge)</string>
+    <string name="portuguese">Portuguese</string>
+    <string name="english">English</string>
+    <string name="data">Data</string>
+    <string name="clear_history">Clear History</string>
+    <string name="support">Support</string>
+    <string name="support_patreon">Support on Patreon</string>
+    <string name="version">Version: %1$s</string>
+    <string name="reset_warning">This will reset your stats for Daily and Avalanche modes. This action cannot be undone.</string>
+    <string name="clear">Clear</string>
+    <string name="cancel">Cancel</string>
+    <string name="change_dictionary">Change Language?</string>
+    <string name="change_dictionary_warning">Changing the language will reset your current Avalanche round. If you create or accept a challenge, make sure you are in the same language.</string>
+    <string name="change_dictionary_confirm">Change and Reset</string>
 </resources>

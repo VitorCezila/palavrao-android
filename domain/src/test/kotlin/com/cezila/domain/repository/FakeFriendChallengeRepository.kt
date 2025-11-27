@@ -4,6 +4,7 @@ import com.cezila.domain.error.CreateFriendChallengeError
 import com.cezila.domain.error.StartFriendRoundError
 import com.cezila.domain.model.Word
 import com.cezila.domain.Result
+import com.cezila.domain.repository.challenge.FriendChallengeRepository
 
 class FakeFriendChallengeRepository(
     private val codeToReturn: String = "9F2K6X",

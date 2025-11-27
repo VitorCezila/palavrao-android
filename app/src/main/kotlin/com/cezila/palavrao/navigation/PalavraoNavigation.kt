@@ -1,5 +1,6 @@
 package com.cezila.palavrao.navigation
 
+import SettingsScreen
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.cezila.core_navigation.PalavraoScreen
@@ -36,9 +37,6 @@ fun NavGraphBuilder.palavraoNavigation() {
         StatsScreen()
     }
     composable<PalavraoScreen.SettingsScreen> {
-        PlaceholderScreen("Configuração — em breve")
-    }
-    composable<PalavraoScreen.AboutScreen> {
-        PlaceholderScreen("Sobre nós — em breve")
+        SettingsScreen()
     }
 }

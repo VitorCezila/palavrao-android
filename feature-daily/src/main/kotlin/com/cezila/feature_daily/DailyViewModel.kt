@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cezila.domain.Result
 import com.cezila.domain.error.SubmitGuessError
+import com.cezila.domain.model.Language
 import com.cezila.domain.model.LetterFeedback
 import com.cezila.domain.model.LetterState
 import com.cezila.domain.model.Round
@@ -137,7 +138,7 @@ class DailyViewModel @Inject constructor(
 
         val guessString = s.currentInput.filterNotNull().joinToString("")
         viewModelScope.launch {
-            when (val res = submitGuess(round, guessString)) {
+            when (val res = submitGuess(round, guessString, Language.PT)) {
                 is Result.Error -> {
                     _events.send(DailyEvent.ShowGuessError(res.error))
                 }

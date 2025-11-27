@@ -9,12 +9,14 @@ import com.cezila.domain.model.LetterFeedback
 import com.cezila.domain.model.LetterState
 import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
+import com.cezila.domain.repository.SettingsRepository
 import com.cezila.domain.use_case.SubmitGuessUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -25,7 +27,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ChallengeGameViewModel @Inject constructor(
     private val submitGuess: SubmitGuessUseCase,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ChallengeGameUiState())
@@ -123,7 +126,8 @@ class ChallengeGameViewModel @Inject constructor(
 
         val guessString = s.currentInput.filterNotNull().joinToString("")
         viewModelScope.launch {
-            when (val res = submitGuess(round, guessString)) {
+            val currentLang = settingsRepository.getLanguage().first()
+            when (val res = submitGuess(round, guessString, currentLang)) {
                 is Result.Error -> {
                     _events.send(ChallengeGameEvent.ShowGuessError(res.error))
                 }

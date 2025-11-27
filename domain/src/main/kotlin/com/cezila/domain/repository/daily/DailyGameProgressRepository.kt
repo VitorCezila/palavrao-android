@@ -12,5 +12,5 @@ interface DailyGameProgressRepository {
 
     fun getDailyStats(): Flow<DailyStats>
     suspend fun updateDailyStats(gameWon: Boolean)
-
+    suspend fun clearDailyStats()
 }

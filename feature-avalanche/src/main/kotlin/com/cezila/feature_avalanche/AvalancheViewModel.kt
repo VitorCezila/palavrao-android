@@ -9,6 +9,7 @@ import com.cezila.domain.model.LetterState
 import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
 import com.cezila.domain.model.Word
+import com.cezila.domain.repository.SettingsRepository
 import com.cezila.domain.rules.GuessEvaluator
 import com.cezila.domain.use_case.SubmitGuessUseCase
 import com.cezila.domain.use_case.avalanche.GetAvalancheStatsUseCase
@@ -36,7 +37,8 @@ class AvalancheViewModel @Inject constructor(
     private val loadCurrentRound: LoadCurrentAvalancheRoundUseCase,
     private val saveRound: SaveAvalancheRoundUseCase,
     private val updateGameResult: UpdateAvalancheGameResultUseCase,
-    getAvalancheStats: GetAvalancheStatsUseCase
+    getAvalancheStats: GetAvalancheStatsUseCase,
+    private val settingsRepository: SettingsRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(AvalancheUiState())
@@ -167,7 +169,8 @@ class AvalancheViewModel @Inject constructor(
 
         val guessString = s.currentInput.filterNotNull().joinToString("")
         viewModelScope.launch {
-            when (val res = submitGuess(round, guessString)) {
+            val currentLang = settingsRepository.getLanguage().first()
+            when (val res = submitGuess(round, guessString, currentLang)) {
                 is Result.Error -> {
                     _events.send(AvalancheEvent.ShowGuessError(res.error))
                 }

@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.cezila.data.repository.avalanche.DataStoreAvalancheGameProgressRepository
 import com.cezila.data.repository.avalanche.LocalRandomAvalancheRepository
+import com.cezila.domain.repository.SettingsRepository
 import com.cezila.domain.repository.avalanche.AvalancheGameProgressRepository
 import com.cezila.domain.repository.avalanche.AvalancheRepository
 import com.cezila.domain.use_case.avalanche.GetAvalancheStatsUseCase
@@ -25,8 +26,8 @@ object AvalancheModule {
 
     @Provides
     @Singleton
-    fun provideAvalancheRepository(app: Application): AvalancheRepository =
-        LocalRandomAvalancheRepository(app.assets)
+    fun provideAvalancheRepository(app: Application, settingsRepository: SettingsRepository): AvalancheRepository =
+        LocalRandomAvalancheRepository(app.assets, settingsRepository = settingsRepository)
 
     @Provides
     @Singleton
