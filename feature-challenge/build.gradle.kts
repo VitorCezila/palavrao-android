@@ -45,6 +45,10 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
 
+    // firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+
     // jetpack
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)

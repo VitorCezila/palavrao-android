@@ -11,6 +11,9 @@ import com.cezila.domain.model.Round
 import com.cezila.domain.model.RoundStatus
 import com.cezila.domain.repository.SettingsRepository
 import com.cezila.domain.use_case.SubmitGuessUseCase
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
+import com.google.firebase.analytics.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -147,6 +150,15 @@ class ChallengeGameViewModel @Inject constructor(
                             won = updatedRound.status == RoundStatus.WON,
                             keyStates = mergeKeyStates(it.keyStates, out.result.feedback)
                         )
+                    }
+                    if (updatedRound.status != RoundStatus.IN_PROGRESS) {
+                        val resultParam = if (updatedRound.status == RoundStatus.WON) "win" else "lose"
+                        Firebase.analytics.logEvent("game_finished") {
+                            param("mode", "challenge")
+                            param("result", resultParam)
+                            param("attempts", updatedRound.attempts.size.toLong())
+                            param("target", updatedRound.target.value)
+                        }
                     }
                 }
             }
