@@ -51,6 +51,7 @@ import com.cezila.core_designsystem.utils.GameShareManager
 import com.cezila.core_navigation.currentComposeNavigator
 import com.cezila.domain.error.SubmitGuessError
 import com.cezila.feature_avalanche.component.EndGameDialog
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun AvalancheScreen(
@@ -64,7 +65,7 @@ fun AvalancheScreen(
 
     LaunchedEffect(key1 = Unit) {
         vm.start()
-        vm.events.collect { event ->
+        vm.events.collectLatest { event ->
             when (event) {
                 is AvalancheEvent.ShowGuessError -> {
                     val message = when (event.message) {
@@ -73,6 +74,7 @@ fun AvalancheScreen(
                         SubmitGuessError.INVALID_CHARS -> context.getString(R.string.invalid_chars)
                         SubmitGuessError.INVALID_WORD -> context.getString(R.string.invalid_word)
                     }
+                    snackbarHostState.currentSnackbarData?.dismiss()
                     snackbarHostState.showSnackbar(
                         message = message,
                         actionLabel = context.getString(R.string.ok)
