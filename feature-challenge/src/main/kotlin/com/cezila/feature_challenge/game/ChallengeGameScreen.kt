@@ -47,6 +47,7 @@ import com.cezila.core_designsystem.utils.GameShareManager
 import com.cezila.core_navigation.currentComposeNavigator
 import com.cezila.domain.error.SubmitGuessError
 import com.cezila.feature_challenge.game.components.ChallengeEndGameDialog
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ChallengeScreen(
@@ -59,7 +60,7 @@ fun ChallengeScreen(
     val shareManager = remember(context) { GameShareManager(context) }
 
     LaunchedEffect(key1 = Unit) {
-        vm.events.collect { event ->
+        vm.events.collectLatest { event ->
             when (event) {
                 is ChallengeGameEvent.ShowGuessError -> {
                     val message = when (event.message) {
@@ -68,6 +69,7 @@ fun ChallengeScreen(
                         SubmitGuessError.INVALID_CHARS -> context.getString(R.string.invalid_chars)
                         SubmitGuessError.INVALID_WORD -> context.getString(R.string.invalid_word)
                     }
+                    snackbarHostState.currentSnackbarData?.dismiss()
                     snackbarHostState.showSnackbar(
                         message = message,
                         actionLabel = context.getString(R.string.ok)
