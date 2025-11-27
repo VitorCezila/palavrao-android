@@ -16,6 +16,9 @@ import com.cezila.domain.use_case.daily.GetDailyGameSessionUseCase
 import com.cezila.domain.use_case.daily.GetDailyStatsUseCase
 import com.cezila.domain.use_case.daily.SaveDailyRoundUseCase
 import com.cezila.domain.use_case.daily.UpdateDailyGameResultUseCase
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
+import com.google.firebase.analytics.logEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -159,6 +162,14 @@ class DailyViewModel @Inject constructor(
                         )
                     }
                     if (updatedRound.status != RoundStatus.IN_PROGRESS) {
+                        val resultParam = if (updatedRound.status == RoundStatus.WON) "win" else "lose"
+                        Firebase.analytics.logEvent("game_finished") {
+                            param("mode", "daily")
+                            param("result", resultParam)
+                            param("attempts", updatedRound.attempts.size.toLong())
+                            param("streak", _state.value.currentStreak.toLong())
+                            param("target", updatedRound.target.value)
+                        }
                         updateGameResult(updatedRound.status == RoundStatus.WON)
                         saveRound(updatedRound)
                     } else {

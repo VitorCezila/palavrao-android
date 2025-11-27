@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
     id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -13,7 +15,7 @@ android {
     compileSdk = Configurations.compileSdk
 
     defaultConfig {
-        applicationId = "com.cezila.palavrao"
+        applicationId = "com.cezila.palavreando"
         minSdk = Configurations.minSdk
         targetSdk = Configurations.targetSdk
         versionCode = Configurations.versionCode
@@ -38,6 +40,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -80,6 +83,11 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
+
+    // firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics.ndk)
+    implementation(libs.firebase.analytics)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
