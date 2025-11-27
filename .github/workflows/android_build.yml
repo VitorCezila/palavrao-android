@@ -2,7 +2,7 @@ name: Android Build & Release
 
 on:
   push:
-    branches: [ "develop", "main" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -28,18 +28,8 @@ jobs:
       - name: Gradle permission
         run: chmod +x gradlew
 
-      - name: Build AAB
-        run: ./gradlew bundleRelease
-        env:
-          KEYSTORE_PATH: release.jks
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-          PALAVRAO_BASE_URL: ${{ secrets.PALAVRAO_BASE_URL }}
-          API_KEY: ${{ secrets.API_KEY }}
-
-      - name: Build APK
-        run: ./gradlew assembleRelease
+      - name: Build AAB and APK
+        run: ./gradlew bundleRelease assembleRelease
         env:
           KEYSTORE_PATH: release.jks
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
@@ -53,3 +43,9 @@ jobs:
         with:
           name: app-release-bundle
           path: app/build/outputs/bundle/release/app-release.aab
+
+      - name: Upload do APK (Artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-apk
+          path: app/build/outputs/apk/release/app-release.apk

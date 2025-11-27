@@ -80,7 +80,7 @@
     <string name="data">Dados</string>
     <string name="clear_history">Limpar Histórico</string>
     <string name="support">Suporte</string>
-    <string name="support_patreon">Doe no Patreon</string>
+    <string name="support_patreon">Doe no kofi</string>
     <string name="version">Versão: %1$s</string>
     <string name="reset_warning">Isso irá resetar suas estatísticas para os modos Diário e Avalanche. Esta ação não pode ser desfeita.</string>
     <string name="clear">Limpar</string>
