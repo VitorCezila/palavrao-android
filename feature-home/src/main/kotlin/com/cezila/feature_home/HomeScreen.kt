@@ -15,7 +15,6 @@ import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -117,10 +116,6 @@ fun HomeContent(
             )
 
             Spacer(modifier = Modifier.weight(0.5f))
-
-            Button(onClick = { throw RuntimeException("Teste teste lytics palavreando!") }) {
-                Text("Forçar Crash")
-            }
 
             GameModeCard(
                 icon = Icons.Default.LocalFireDepartment,
