@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- default colors-->
+    <color name="pv_primary_dark">#D3DAD9</color>
+    <color name="pv_onPrimary_dark">#000000</color>
+    <color name="pv_background_dark">#37353E</color>
+    <color name="pv_onBackground_dark">#E5E7EB</color>
+    <color name="pv_surface_dark">#44444E</color>
+    <color name="pv_onSurface_dark">#E5E7EB</color>
+    <color name="pv_surfaceVariant_dark">#1E2430</color>
+    <color name="pv_outline_dark">#2E3645</color>
+    <color name="pv_focus_dark">#D9E7D999</color>
+    <color name="error">#A62222</color>
+
+    <!-- Game states (compartilhadas) -->
+    <color name="pv_correct">#D96AAA64</color>
+    <color name="pv_present">#D9C9B458</color>
+    <color name="pv_absent_dark">#B3303031</color>
+</resources>

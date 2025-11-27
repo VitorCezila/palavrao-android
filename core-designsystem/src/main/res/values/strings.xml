@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WORDIFY</string>
+    <string name="app_description">Wordify has three different game modes for you to enjoy.</string>
+
+    <!-- Game Modes -->
+    <string name="avalanche_title">AVALANCHE</string>
+    <string name="avalanche_mode">Avalanche Mode</string>
+    <string name="avalanche_description">🔥 Avalanche: In avalanche mode, you try to get as many words right in a row.</string>
+    <string name="avalanche_short_description">Get as many words right as you can.</string>
+
+    <string name="daily_title">DAILY</string>
+    <string name="daily_mode">Daily Word</string>
+    <string name="daily_description">📅 Daily Word: In Daily Word, your goal is to guess correctly with the fewest attempts possible.</string>
+    <string name="daily_short_description">Daily Word (Portuguese Only)</string>
+
+    <string name="challenge_title">CHALLENGE</string>
+    <string name="challenge_mode">Challenge Friends</string>
+    <string name="challenge_description">👥 Challenge: In challenge mode, you must guess the word created by a friend.</string>
+    <string name="challenge_short_description">Create or play challenges.</string>
+
+    <string name="absent_description">Letter is not in the word</string>
+    <string name="present_description">Present (wrong position)</string>
+    <string name="correct_description">Correct</string>
+
+    <string name="statistics">Statistics</string>
+    <string name="settings">Settings</string>
+    <string name="ok">OK</string>
+    <string name="send">SEND</string>
+    <string name="next">NEXT</string>
+    <string name="share">SHARE</string>
+
+    <string name="try_again">TRY AGAIN</string>
+
+    <!-- Warnings -->
+    <string name="round_already_finished">The round has already finished</string>
+    <string name="invalid_length">The word must have 5 letters</string>
+    <string name="invalid_chars">Invalid characters</string>
+    <string name="invalid_word">That word doesn\'t exist</string>
+    <string name="challenge_not_found">Challenge not found</string>
+    <string name="start_challenge_generic_error">Start challenge error</string>
+    <string name="create_challenge_generic_error">Create challenge error</string>
+    <string name="could_not_fetch_word_try_again_later">Unable to find the word, please try again later.</string>
+
+    <!-- Descriptions -->
+    <string name="arrow_back_description">Back</string>
+    <string name="help">Help</string>
+
+    <!-- Share -->
+    <string name="share_toast_copied">Copied to clipboard</string>
+    <string name="share_avalanche_content">I played Wordify Avalanche - word: %1$s\nStreak: %2$d 🔥</string>
+    <string name="share_daily_header">I played Wordify %1$s %2$d/%3$d</string>
+    <string name="share_daily_streak_suffix">" 🔥 %1$d (streak)"</string>
+    <string name="share_challenge_header">I played Wordify friend challenge %1$s %2$d/%3$d</string>
+
+    <string name="game_won_title">CONGRATULATIONS 🎉🎉</string>
+    <string name="game_lost_title">TOO BAD 😔</string>
+    <string name="streak_current_format">Current Streak: %1$d 🔥</string>
+    <string name="streak_broken">Streak Broken 🚒</string>
+    <string name="the_word_was">The word was:</string>
+
+    <string name="type_a_word_hint">Type a word (5 letters)</string>
+    <string name="generate_code_button">GENERATE CODE</string>
+    <string name="play_challenge_title">Play Challenge</string>
+    <string name="join_code_hint">Enter the challenge code</string>
+    <string name="start_challenge_button">START CHALLENGE</string>
+
+    <!-- Stats Screen  -->
+    <string name="games_played">Games Played</string>
+    <string name="current_streak">Current Streak</string>
+    <string name="best_streak">Best Streak</string>
+
+    <!-- Settings Screen -->
+    <string name="unknown">Unknown</string>
+    <string name="dictionary_title">Dictionary (Avalanche/Challenge)</string>
+    <string name="portuguese">Portuguese</string>
+    <string name="english">English</string>
+    <string name="data">Data</string>
+    <string name="clear_history">Clear History</string>
+    <string name="support">Support</string>
+    <string name="support_patreon">Buy me a coffee</string>
+    <string name="version">Version: %1$s</string>
+    <string name="reset_warning">This will reset your stats for Daily and Avalanche modes. This action cannot be undone.</string>
+    <string name="clear">Clear</string>
+    <string name="cancel">Cancel</string>
+    <string name="change_dictionary">Change Language?</string>
+    <string name="change_dictionary_warning">Changing the language will reset your current Avalanche round. If you create or accept a challenge, make sure you are in the same language.</string>
+    <string name="change_dictionary_confirm">Change and Reset</string>
+</resources>
