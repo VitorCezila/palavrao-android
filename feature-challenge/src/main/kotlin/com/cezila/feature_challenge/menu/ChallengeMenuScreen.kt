@@ -295,7 +295,7 @@ fun ChallengeContent(
     }
 }
 
-@Preview
+@Preview(locale = "pt", widthDp = 320)
 @Composable
 private fun ChallengeContentPreview() {
     PalavraoTheme {
