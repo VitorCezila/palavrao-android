@@ -285,7 +285,7 @@ fun AvalancheScreenContent(
     }
 }
 
-@Preview
+@Preview(locale = "pt", widthDp = 320)
 @Composable
 private fun AvalancheScreenPreview() {
     PalavraoTheme {
@@ -309,7 +309,7 @@ private fun AvalancheScreenPreview() {
     }
 }
 
-@Preview
+@Preview(locale = "pt", widthDp = 320)
 @Composable
 private fun AvalancheScreenPreviewStartRoundFailed() {
     PalavraoTheme {
