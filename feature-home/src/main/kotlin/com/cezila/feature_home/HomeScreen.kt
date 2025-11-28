@@ -111,8 +111,8 @@ fun HomeContent(
                 text = stringResource(R.string.app_name).uppercase(),
                 fontWeight = FontWeight.Bold,
                 color = PalavraoTheme.colors.primary,
-                fontSize = 36.sp,
-                letterSpacing = TextUnit(10f, TextUnitType.Sp)
+                fontSize = 30.sp,
+                letterSpacing = TextUnit(6f, TextUnitType.Sp)
             )
 
             Spacer(modifier = Modifier.weight(0.5f))
@@ -211,7 +211,7 @@ fun HomeContent(
     }
 }
 
-@Preview
+@Preview(locale = "pt", widthDp = 320)
 @Composable
 private fun HomeContentPreview() {
     PalavraoTheme {

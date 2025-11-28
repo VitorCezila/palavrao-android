@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
@@ -37,17 +36,29 @@ fun AvalancheStatsPage(stats: AvalancheStats) {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            StatsCard(label = stringResource(R.string.games_played), value = stats.gamesPlayed.toString())
+            StatsCard(
+                label = stringResource(R.string.games_played),
+                value = stats.gamesPlayed.toString(),
+                modifier = Modifier.weight(1f)
+            )
         }
         Spacer(Modifier.height(16.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            StatsCard(label = stringResource(R.string.current_streak), value = stats.currentStreak.toString())
-            StatsCard(label = stringResource(R.string.best_streak), value = stats.maxStreak.toString())
+            StatsCard(
+                label = stringResource(R.string.current_streak),
+                value = stats.currentStreak.toString(),
+                modifier = Modifier.weight(1f)
+            )
+            StatsCard(
+                label = stringResource(R.string.best_streak),
+                value = stats.maxStreak.toString(),
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }
@@ -60,7 +71,6 @@ private fun StatsCard(
 ) {
     Card(
         modifier = modifier
-            .width(160.dp)
             .height(120.dp)
             .background(PalavraoTheme.colors.surface),
         elevation = CardDefaults.cardElevation(4.dp),
@@ -75,25 +85,27 @@ private fun StatsCard(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
+                .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = value,
                 style = MaterialTheme.typography.displaySmall,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                maxLines = 1
             )
             Spacer(Modifier.height(4.dp))
             Text(
                 text = label,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center
             )
         }
     }
 }
 
-@Preview
+@Preview(locale = "pt", widthDp = 320)
 @Composable
 private fun AvalancheStatsPagePreview() {
     PalavraoTheme {
@@ -107,7 +119,7 @@ private fun AvalancheStatsPagePreview() {
     }
 }
 
-@Preview
+@Preview(locale = "pt", widthDp = 320)
 @Composable
 private fun StatsCardPreview() {
     PalavraoTheme {

@@ -96,7 +96,7 @@ fun DailyEndGameDialog(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 RoundedButton(
-                    modifier = Modifier.width(140.dp),
+                    modifier = Modifier.width(160.dp),
                     text = stringResource(R.string.share),
                     onClick = { onShare() },
                     fontSize = 12
@@ -106,7 +106,7 @@ fun DailyEndGameDialog(
     )
 }
 
-@Preview
+@Preview(locale = "pt", widthDp = 320)
 @Composable
 private fun EndGameDialogPreviewLoose() {
     PalavraoTheme {
@@ -136,7 +136,7 @@ private fun EndGameDialogPreviewLoose() {
     }
 }
 
-@Preview
+@Preview(locale = "pt", widthDp = 320)
 @Composable
 private fun EndGameDialogPreviewWon() {
     PalavraoTheme {

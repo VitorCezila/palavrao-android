@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
@@ -68,7 +67,7 @@ fun GameModeCard(
     }
 }
 
-@Preview
+@Preview(locale = "pt", widthDp = 320)
 @Composable
 private fun GameModeCardPreview() {
     PalavraoTheme {
